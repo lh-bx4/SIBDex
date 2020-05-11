@@ -1,0 +1,5 @@
+https://www.kaggle.com/rounakbanik/pokemon#pokemon.csv
+https://www.pokemon.com/fr/pokedex/
+https://pokemondb.net/pokedex/bulbasaur
+https://www.pokepedia.fr/Liste_des_Pok%C3%A9mon_par_statistiques_de_base
+https://pokedex.org/
