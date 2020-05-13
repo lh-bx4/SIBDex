@@ -25,16 +25,19 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
 /**
  *
  * @author Louis
  */
 public class cli {
-    
-
-    
     public static void main(String[] args) {
+        System.out.println("Bienvenue dans le SIBDex. Veuillez entrer votre pseudo et votre mot de passe.");
+        System.out.println("username ?");
+        String username = Lire.S();
+        System.out.println("pwd ?");
+        String password = Lire.S();
+        ctrl.connect("jdbc:postgresql://localhost/pokemon",username,password);
+        System.out.println("Vous êtes entrés dans le SIBDex !");
         String[] r = new String [] {"1","3","2"};
         new Stream<String>() {
             @Override
