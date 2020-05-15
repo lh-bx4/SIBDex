@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class util {
     
-    public static final int BRACKETS = 12, SBRACKETS=13, CBRACKETS=14;
+    public static final int BRACKETS = 12, SBRACKETS=13, CBRACKETS=14, SPIKES=15;
     
     
     public static String c(ArrayList<String> st, char c) {
@@ -40,11 +40,17 @@ public class util {
                 return "["+s+"]";
             case CBRACKETS:
                 return "{"+s+"}";
+            case SPIKES:
+                return "<"+s+">";
             default:
                 return "("+s+")";
         }
     }
     public static String d(String[] st, char c, int q) {
+        return e(c(st, c), q);
+    }
+    
+    public static String d(ArrayList<String> st, char c, int q) {
         return e(c(st, c), q);
     }
 }

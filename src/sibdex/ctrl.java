@@ -5,6 +5,11 @@
  */
 package sibdex;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,10 +17,14 @@ import java.sql.SQLTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 import static jdk.nashorn.internal.objects.NativeMath.min;
+import static misc.read2.S;
+import misc.util;
+import static misc.util.SPIKES;
 import sibdex.pokedata.pdI;
 
 /**
@@ -24,7 +33,10 @@ import sibdex.pokedata.pdI;
  */
 public class ctrl {
     
-    private static Connection CNX;
+    private static final Properties prop = new Properties();
+    private static final String prop_file = "./src/assets/config.properties";
+    private static final String FIRSTLAUNCH="first_launch";
+    private static Connection CNX=null;
     /**
      * change following your postgres instalation
      */
@@ -40,17 +52,17 @@ public class ctrl {
         new AccessType(SCIENTISTLVL, "SCIENTIST"),
         new AccessType(3, "DEVMODE", DEVUSN, DEVPWD),
     };
-    private static String url="";
-    public static void setUrl(String u) {url=u;}
-    public static boolean isUrl() {return url.length()>0;}
-    
+    private static final String url="jdbc:postgresql://localhost/pokemon";
+    private static final String[] sql_inits = new String[] {
+        "./src/assets/sql/create.sql"
+    };
+        
     private static AccessType CAX;
     /**
      * see defined accestype
-     * @deprecated
-     */
-    private static int AXLVL=-1;
-    public static boolean isAccessible() {return AXLVL!=-1;}
+     * @return if access is correclty sat up
+    */
+    public static boolean isAccessible() {return CNX!=null && CAX!=null;}
     /**
      * log in function
      * @param args 
@@ -68,7 +80,11 @@ public class ctrl {
         ArrayList<String> _load = new ArrayList<>(Arrays.asList(args));
         String _username,_password;
         
-        if ((_tmp=_load.indexOf("T"))!=-1)                               // Seeking type...
+        if (_load.size()==0) {
+            String[] id = securePrompt.request(true, true);
+            CNX=psql_connect(id);
+            CAX=_fa(id[2]);
+        } else if ((_tmp=_load.indexOf("T"))!=-1)                               // Seeking type...
         {
             if ((ctrl.CAX=_fa(_an=_load.get(_tmp+1)))!=null)                         /// Finding type...
             {
@@ -93,16 +109,19 @@ public class ctrl {
                         "Please specify password.\n SYNTAX:\"P <password>\""
                     );
                 }}
+                CNX=psql_connect(securePrompt.request(CAX.un, CAX.pw));
             } else                                                              /// Unknown type... 
             {
                 throw new AssertionError(
                     "Unknown access level : \""+_an+"\". add access names here"   
-               );
+                );
             }                                     
         } else                                                                  // No type found
         {
+            ArrayList<String> atn = new ArrayList<>();
+            for(AccessType at:AT) atn.add(at.name);
             throw new AssertionError(
-                "Please specify access level.\n SYNTAX:\"T <GUEST|TRAINER|SCIENTIST>\"" //programmatically get the list of defined accesses
+                "Unknown type. "+util.d(atn, '|', SPIKES)
             );
         }
     }
@@ -118,31 +137,107 @@ public class ctrl {
     }
     
     
+    private static Connection psql_connect(String[] id) throws SQLException {
+        return psql_connect(id[0], id[1]);
+    }
+    public static Connection psql_connect(String usn, String pwd) throws SQLException {
+        return DriverManager.getConnection(url, usn, pwd);
+    }
+    
     public static void connect() throws SQLException {
         connect(CAX.usn, CAX.pwd);
     }
-    public static void connect(String username, String pwd) throws SQLException,SQLTimeoutException {
-        if (isUrl()) {
-            try {
-                Class.forName("org.postgresql.Driver");
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ctrl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            CNX = DriverManager.getConnection(
-                url,username,pwd
-            );
-            //System.out.println("Connction is valid ? "+c.isValid(2000));
-            System.out.println("Bienvenue "+username+".");
-            System.out.println("Vous êtes entrés dans le SIBDex !");
-        } else {
-            System.err.println("No url");
+    public static void connect(String usn, String pwd) throws SQLException,SQLTimeoutException {
+        CNX=null;
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ctrl.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }  
+        System.out.println("Attempt to connect to <"+usn+"> <"+pwd+">");
+        try {
+            CNX = DriverManager.getConnection(url, usn, pwd);
+            System.out.println("Connection successfully established.");
+        } catch (SQLException ex) {
+            System.err.println("An error has occured, please try again.");
+            Logger.getLogger(ctrl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     private static boolean checkAccess(int[] permission) {
         int m = permission[0];
         for(int ab:permission)m=ab<m?ab:m;
-        return CAX.level>=m;
+        return CAX!=null?CAX.level>=m:false;
+    }
+    
+
+    
+    private static FileOutputStream config() {
+        File f;
+        FileOutputStream fos;
+        f=new File(prop_file);
+        try {
+            f.createNewFile();
+            fos=new FileOutputStream(f);
+            prop.setProperty(FIRSTLAUNCH, "true");                              // set the property file
+            prop.store(fos, null);
+            return fos;
+        } catch (IOException ex) {
+            System.err.println("Cannot create file. "+ex);
+            return null;
+        }
+    }
+    /**
+     * Initialize data in sql. See inits[] for request files.
+     * @param usn Connection username
+     * @param pwd Connection password
+     * @throws SQLException : retry if connection failed
+     */
+    public static void init() throws SQLException {
+        File pf = new File(prop_file);
+        FileInputStream in;
+        FileOutputStream out;
+        if (!pf.exists()) {
+            try {
+                pf.createNewFile();
+            } catch (IOException ex) {
+                System.err.println("Unknown exception while creating properties file.");
+                System.err.println("Be sure to have permission in working directory.");
+            }
+            try {
+                out = new FileOutputStream(pf);
+                prop.setProperty(FIRSTLAUNCH,"true");                           // set property file
+                prop.store(out, null);
+                init();
+            } catch (FileNotFoundException ex) {
+                System.err.println("Unknow error.");                             // This error shouldn't be possible due to the if statement.
+            } catch (IOException ex) {
+                System.err.println("Unknow error.");
+            }
+        } else {
+            try {
+                in = new FileInputStream(pf);
+                prop.load(in);
+                if (prop.getProperty(FIRSTLAUNCH).equals("true"))               // if first launch
+                {
+                    System.out.println("For SIBex to work, you need to provide your Super User PSQL login.");
+                    System.out.println("You will need to repeat this operation untill initialisation succeed.");
+                    Connection cnx;
+                    cnx=psql_connect(securePrompt.request(true, true));
+                    //psql_connect(usn, pwd);
+                    for (String s:sql_inits)                                    // executing sql scripts
+                        cnx.createStatement().executeQuery("\\i "+s);
+                    prop.setProperty(FIRSTLAUNCH, "false");
+                    cnx.close();
+                } else {
+                    System.out.println("Initilisation skiped.");
+                }
+            } catch (FileNotFoundException ex) {
+                System.err.println("Unknow error");                             // This error shouldn't be possible due to the if statement.
+            } catch (IOException ex) {
+                System.err.println("Prop cannot be loaded or else.");
+            }
+        }
     }
     
     protected static void add(pdI I){
@@ -162,6 +257,16 @@ public class ctrl {
     
     protected void remove(){
        
+    }
+    
+    public static void pactions() {
+        System.out.println("LOG TYPE : "+CAX.name);
+        System.err.println("Print authorized action here.");
+    }
+    
+    public static boolean read_action(String a) {
+        System.err.println("Do action here");
+        return !a.toLowerCase().equals("quit");
     }
        
     private static class AccessType {
