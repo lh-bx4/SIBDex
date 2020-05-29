@@ -19,45 +19,14 @@ import static sibdex.pokedata.*;
  */
 public class cli {
     
-    static String[] 
-            args1 = new String[] {
-                "T", "GUEST", 
-                "U", "poes", 
-                "P", "s"
-            },
-            dm = new String[] {
-                "T", "DEVMODE"
-            },
-            empty = new String[] {}
-    ;
-    
     public static void main(String[] args) {
-        run(empty);
+        run();
     }
     
-    public static void run(String[] args) {
-
-        try {
-            ctrl.init();
-        } catch (SQLException ex) {
-            System.err.println("Error has occured. Please retry.");
-            Logger.getLogger(cli.class.getName()).log(Level.SEVERE, null, ex);
-            return;
-        }
-        
+    public static void run() {
+       
         do {
-            try {
-                ctrl.access(args);
-            } catch (AssertionError ae) {
-                Logger.getLogger(cli.class.getName()).log(Level.INFO, null, ae);
-            } catch (UnsupportedOperationException uoe) {
-                Logger.getLogger(cli.class.getName()).log(Level.SEVERE, null, uoe);
-            } catch (SQLTimeoutException te) {
-                Logger.getLogger(cli.class.getName()).log(Level.WARNING, null, te); 
-            } catch (SQLException e){
-                Logger.getLogger(cli.class.getName()).log(Level.SEVERE, null, e);
-                System.err.println("Make sure JDBC driver is installed");
-            }
+            ctrl.access();
         } while(!ctrl.isAccessible());
         
         String C;

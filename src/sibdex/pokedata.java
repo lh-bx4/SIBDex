@@ -35,7 +35,7 @@ public abstract class pokedata {
     public void exec(Connection c, String q) {
         try {
             Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery(q);
+            stmt.executeUpdate(q);
         } catch (SQLException ex) {
             Logger.getLogger(pokedata.class.getName()).log(Level.INFO, null, ex);
         }

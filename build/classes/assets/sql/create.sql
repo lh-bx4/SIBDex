@@ -1,5 +1,3 @@
-CREATE DATABASE pokemon;
-\c pokemon
 CREATE SCHEMA chen;
 SET search_path to chen;
 CREATE TABLE type (
@@ -39,9 +37,3 @@ CREATE TABLE evolve(
     CONSTRAINT fk_evolve_down FOREIGN KEY(down) REFERENCES pokemon(id),
     CONSTRAINT fk_evolve_up FOREIGN KEY(up) REFERENCES pokemon(id)
 );
-\dt
-
-/*DROP TABLE player;
-DROP SCHEMA player1;
-DELETE FROM  Club WHERE 
-*/

@@ -5,11 +5,12 @@
  */
 package sibdex;
 
+import java.awt.Event;
 import java.awt.Frame;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import javafx.scene.web.PromptData;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 
 /**
  *
@@ -20,9 +21,24 @@ public final class securePrompt extends javax.swing.JDialog {
     private securePrompt(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (e.getKeyCode()==e.VK_ENTER) 
+                    validateBtnActionPerformed(new ActionEvent(e.getSource(), e.getID(), ""));
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                
+            }
+        });
     }
     
-    public static String[] request(boolean usn, boolean pwd) throws SQLException {
+    public static String[] request(boolean usn, boolean pwd) {
         securePrompt sP = new securePrompt(new Frame(), true);
         sP.usnTextField.setEnabled(usn);
         sP.pwdTextField2.setEnabled(pwd);
