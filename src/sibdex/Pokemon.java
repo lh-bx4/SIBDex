@@ -21,6 +21,11 @@ public void setAtk(int atk){
 this.attack = atk;
 }
 
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+
 public void setAgainst_bug(int against_bug){
 this.against_bug = against_bug;
 }
