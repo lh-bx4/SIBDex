@@ -6,31 +6,15 @@
 package sibdex;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.SQLTimeoutException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Stream;
-import static jdk.nashorn.internal.objects.NativeMath.min;
 import misc.read2;
-import static misc.read2.S;
-import misc.util;
-import static misc.util.SPIKES;
 import org.postgresql.util.PSQLException;
 import sibdex.pokedata.pdI;
 
@@ -287,7 +271,41 @@ public class ctrl {
         }
         
         public abstract void does();
+
+    }
+    //Récupère seulement les ID et les Noms pour l'affichage général : chaque paire correspond à 1 poké
+    //On n'a aucun intérêt à récup toutes les datas car elles ne seront pas toutes display
+    protected ArrayList getAllPokemon(Connection con) throws SQLException{
+        Statement stmt = con.createStatement();
+        String psql = "SELECT id,name FROM pokemon" ;
+        ResultSet rs = stmt.executeQuery(psql);
+        //On recup les pokémons sous forme d'une ArrayList contenant des paires (id,name)
+        ArrayList<ArrayList<String>> pokemons = new ArrayList<ArrayList<String>>();
+        while(rs.next()){
+            ArrayList<String> pokemon = new ArrayList<String>();
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            pokemon.add(Integer.toString(id));
+            pokemon.add(name);
+            pokemons.add(pokemon);
+        }
+        rs.close();
+        return(pokemons);
+    }
+    protected Pokemon getPokemon(Connection con,int id) throws SQLException{
+        Pokemon pokemon;
+        Statement stmt = con.createStatement();
+        String psql = "Select * FROM pokemon WHERE id = "+Integer.toString(id);
+        ResultSet rs = stmt.executeQuery(psql);
+        // pokemon hasn't been initialised
+        pokemon = new Pokemon();
+        if(rs.next()){
+        pokemon.setId(rs.getInt("id"));
+        pokemon.setAtk(rs.getInt("attack"));
+        pokemon.setDefense(rs.getInt("Defense"));
         
+        }
+        return(pokemon);
     }
 
 }
