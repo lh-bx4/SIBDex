@@ -10,10 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.SQLTimeoutException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -320,6 +317,40 @@ public class ctrl {
         protected AccessType(int lvl, String nm) {
             this(lvl, nm, "", "", true, true);
         }
+
+
+    }
+    //Récupère seulement les ID et les Noms pour l'affichage général : chaque paire correspond à 1 poké
+    //On n'a aucun intérêt à récup toutes les datas car elles ne seront pas toutes display
+    protected ArrayList getAllPokemon(Connexion con){
+        Statement stmt = con.createStatement();
+        String psql = "SELECT id,name FROM pokemon" ;
+        ResultSet rs = stmt.executeQuery(psql);
+        //On recup les pokémons sous forme d'une ArrayList contenant des paires (id,name)
+        ArrayList<ArrayList<String>> pokemons = new ArrayList<ArrayList<String>>();
+        while(rs.next()){
+            ArrayList<String> pokemon = new ArrayList<String>();
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            pokemon.add(Integer.toString(id));
+            pokemon.add(name);
+            pokemons.add(pokemon);
+        }
+        rs.close();
+        return(pokemons);
+    }
+    protected Pokemon getPokemon(Connexion con,int id){
+        Pokemon pokemon;
+        Statement stmt = con.createStatement();
+        String psql = "Select * FROM pokemon WHERE id = "+Integer.toString(id);
+        ResultSet rs = stmt.executeQuery(psql);
+        if(rs.next()){
+        pokemon.setId(rs.getInt("id"));
+        pokemon.setAtk(rs.getInt("attack"));
+        pokemon.setDef(rs.getInt("Defense"));
+        
+        }
+        return(pokemon);
     }
 
 }
