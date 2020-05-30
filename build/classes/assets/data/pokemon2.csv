@@ -800,3 +800,93 @@
 ['Beast Boost'];2;0.5;2;0.5;4;2;0.5;1;0.5;0.5;1;2;1;1;0;1;1;0.5;101;30720;0;570;15;Junkivore Pokémon;53;1250000;5.5;223;Akuzikingアクジキング;Guzzlord;;799;97;53;43;dark;dragon;888.0;7;1
 ['Prism Armor'];2;2;1;1;1;0.5;1;1;2;1;1;1;1;1;0.5;1;1;1;107;30720;0;600;3;Prism Pokémon;101;1250000;2.4;97;Necrozmaネクロズマ;Necrozma;;800;127;89;79;psychic;;230.0;7;1
 ['Soul-Heart'];0.25;0.5;0;1;0.5;1;2;0.5;1;0.5;2;0.5;0.5;0;0.5;0.5;1;1;95;30720;0;600;3;Artificial Pokémon;115;1250000;1.0;80;Magearnaマギアナ;Magearna;;801;130;115;65;steel;fairy;80.5;7;1
+['Technician'];0.25;1;1;1;2;0;1;2;2;1;1;1;0;0.5;2;0.5;1;1;125;30720;0;600;3;Gloomdweller Pokémon;80;1250000;0.7;90;;Marshadow;;802;90;90;125;fighting;ghost;22.2;7;1
+['Beast Boost'];0.5;1;1;1;0.5;0.5;1;1;1;0.5;2;1;1;0.5;2;1;1;1;73;30720;0;420;45;Poison Pin Pokémon;67;1250000;0.6;67;;Poipole;;803;73;67;73;poison;;1.8;7;1
+['Beast Boost'];0.5;1;2;0.5;1;0.5;0.5;1;1;0.25;2;2;1;0.5;2;1;1;0.5;73;30720;0;540;45;Poison Pin Pokémon;73;1250000;3.6;73;;Naganadel;;804;127;73;121;poison;dragon;150.0;7;1
+['Beast Boost'];0.5;1;0.5;1;0.5;4;1;0.25;1;1;4;0.5;0.25;0;0.5;0.5;1;2;131;30720;0;570;30;Rampart Pokémon;211;1250000;5.5;61;;Stakataka;;805;53;101;13;rock;steel;820.0;7;1
+['Beast Boost'];0.25;2;1;1;0.5;0;0.5;1;2;0.5;2;0.5;0;0.5;1;2;0.5;2;127;30720;0;570;30;Fireworks Pokémon;53;1250000;1.8;53;;Blacephalon;;806;151;79;107;fire;ghost;13.0;7;1
+['Volt Absorb'];1;1;1;0;1;1;1;0.5;1;1;2;1;1;1;1;1;0.5;1;112;30720;0;600;3;Thunderclap Pokémon;75;1250000;1.5;88;;Zeraora;;807;102;80;143;electric;;44.5;7;1
+['Magnet Pull'];0.5;1;0.5;1;0.5;2;2;0.5;1;0.5;2;0.5;0.5;0;0.5;0.5;0.5;1;65;30720;;300;;Hex Nut Pokémon;65;;0.2;46;;Meltan;;808;55;35;34;steel;;8.0;7;1
+['Iron Fist'];0.5;1;0.5;1;0.5;2;2;0.5;1;0.5;2;0.5;0.5;0;0.5;0.5;0.5;1;143;30720;;600;;Hex Nut Pokémon;143;;2.5;135;;Melmetal;;809;80;143;34;steel;;800.0;7;1
+"['Overgrow'; 'Grassy Surge']";2;1;1;0.5;1;1;2;2;1;0.5;0.5;2;1;2;1;1;1;0.5;65;5120;;310;;Chimp Pokémon;50;;0.3;50;;Grookey;;810;40;40;65;grass;;5.0;8;0
+"['Overgrow'; 'Grassy Surge']";2;1;1;0.5;1;1;2;2;1;0.5;0.5;2;1;2;1;1;1;0.5;85;;;420;;Beat Pokémon;70;;0.7;70;;Thwackey;;811;55;60;80;grass;;14.0;8;0
+"['Overgrow'; 'Grassy Surge']";2;1;1;0.5;1;1;2;2;1;0.5;0.5;2;1;2;1;1;1;0.5;125;;;530;;Drummer Pokémon;90;;2.1;100;;Rillaboom;;812;60;70;85;grass;;90.0;8;0
+"['Blaze'; 'Libero']";0.5;1;1;1;0.5;1;0.5;1;1;0.5;2;0.5;1;1;1;2;0.5;2;71;;;310;;Rabbit Pokémon;40;;0.3;50;;Scorbunny;;813;40;40;69;fire;;4.5;8;0
+"['Blaze'; 'Libero']";0.5;1;1;1;0.5;1;0.5;1;1;0.5;2;0.5;1;1;1;2;0.5;2;86;;;420;;Rabbit Pokémon;60;;0.6;65;;Raboot;;814;55;60;94;fire;;9.0;8;0
+"['Blaze'; 'Libero']";0.5;1;1;1;0.5;1;0.5;1;1;0.5;2;0.5;1;1;1;2;0.5;2;116;;;530;;Striker Pokémon;75;;1.4;80;;Cinderace;;815;65;75;119;fire;;33.0;8;0
+"['Torrent'; 'Sniper']";1;1;1;2;1;1;0.5;1;1;2;1;0.5;1;1;1;1;0.5;0.5;40;;;310;;Water Lizard Pokémon;40;;0.3;50;;Sobble;;816;70;40;70;water;;4.0;8;0
+"['Torrent'; 'Sniper']";1;1;1;2;1;1;0.5;1;1;2;1;0.5;1;1;1;1;0.5;0.5;60;;;420;;Water lizard Pokémon;55;;0.7;65;;Drizzile;;817;95;55;90;water;;11.5;8;0
+"['Torrent'; 'Sniper']";1;1;1;2;1;1;0.5;1;1;2;1;0.5;1;1;1;1;0.5;0.5;85;;;530;;Secret Agent Pokémon;65;;1.9;70;;Inteleon;;818;125;65;120;water;;45.2;8;0
+"['Cheek Pouch'; 'Gluttony']";1;1;1;1;1;2;1;1;0;1;1;1;1;1;1;1;1;1;55;;;275;;Cheeky Pokémon;55;;0.3;70;;Skwovet;;819;35;35;25;normal;;2.5;8;0
+"['Cheek Pouch'; 'Gluttony']";1;1;1;1;1;2;1;1;0;1;1;1;1;1;1;1;1;1;95;;;460;;Greedy Pokémon;95;;0.6;120;;Greedent;;820;55;75;20;normal;;6.0;8;0
+"['Keen Eye'; 'Unnerve'; 'Big Pecks']";0.5;1;1;2;1;0.5;1;1;1;0.5;0;2;1;1;1;2;1;1;47;;;245;;Tiny Bird Pokémon;35;;0.2;38;;Rookidee;;821;33;35;57;flying;;1.8;8;0
+"['Keen Eye'; 'Unnerve'; 'Big Pecks']";0.5;1;1;2;1;0.5;1;1;1;0.5;0;2;1;1;1;2;1;1;67;;;365;;Raven Pokémon;55;;0.8;68;;Corvisquire;;822;43;55;77;flying;;16.0;8;0
+"['Pressure'; 'Unnerve'; 'Mirror Armor']";0.25;1;0.5;2;0.5;1;2;0.5;1;0.25;0;1;0.5;0;0.5;1;0.5;1;87;;;495;;Raven Pokémon;105;;2.2;98;;Corviknight;;823;53;85;67;flying;steel;75.0;8;0
+"['Swarm'; 'Compound Eyes'; 'Telepathy']";1;1;1;1;1;0.5;2;2;1;0.5;0.5;1;1;1;1;2;1;1;20;;;180;;Larva Pokémon;20;;0.4;25;;Blipbug;;824;25;45;45;bug;;8.0;8;0
+"['Swarm'; 'Compound Eyes'; 'Telepathy']";2;2;1;1;1;0.25;2;2;2;0.5;0.5;1;1;1;0.5;2;1;1;35;;;335;;Radome Pokémon;80;;0.4;50;;Dottler;;825;50;90;30;bug;psychic;19.5;8;0
+"['Swarm'; 'Frisk'; 'Telepathy']";2;2;1;1;1;0.25;2;2;2;0.5;0.5;1;1;1;0.5;2;1;1;45;;;505;;Seven Spot Pokémon;110;;0.4;60;;Orbeetle;;826;80;120;90;bug;psychic;40.8;8;0
+"['Run Away'; 'Unburden'; 'Stakeout']";2;0.5;1;1;2;2;1;1;0.5;1;1;1;1;1;0;1;1;1;28;;;245;;Fox Pokémon;28;;0.6;40;;Nickit;;827;47;52;50;dark;;8.9;8;0
+"['Run Away'; 'Unburden'; 'Stakeout']";2;0.5;1;1;2;2;1;1;0.5;1;1;1;1;1;0;1;1;1;58;;;455;;Fox Pokémon;58;;1.2;70;;Thievul;;828;87;92;90;dark;;19.9;8;0
+"['Cotton Down'; 'Regenerator'; 'Effect Spore']";2;1;1;0.5;1;1;2;2;1;0.5;0.5;2;1;2;1;1;1;0.5;40;;;250;;Flowering Pokémon;60;;0.4;40;;Gossifleur;;829;40;60;10;grass;;2.2;8;0
+"['Cotton Down'; 'Regenerator'; 'Effect Spore']";2;1;1;0.5;1;1;2;2;1;0.5;0.5;2;1;2;1;1;1;0.5;50;;;460;;Cotton Bloom Pokémon;90;;0.5;60;;Eldegoss;;830;80;120;60;grass;;2.5;8;0
+"['Fluffy'; 'Run Away'; 'Bulletproof']";1;1;1;1;1;2;2;1;0;1;1;1;1;1;1;1;1;1;40;;;270;;Sheep Pokémon;55;;0.6;42;;Wooloo;;831;40;45;48;normal;;6.0;8;0
+"['Fluffy'; 'Steadfast'; 'Bulletproof']";1;1;1;1;1;2;2;1;0;1;1;1;1;1;1;1;1;1;80;;;490;;Sheep Pokémon;100;;1.3;72;;Dubwool;;832;60;90;88;normal;;43.0;8;0
+"['Strong Jaw'; 'Shell Armor'; 'Swift Swim']";1;1;1;2;1;1;0.5;1;1;2;1;0.5;1;1;1;1;0.5;0.5;64;;;284;;Snapping Pokémon;50;;0.3;50;;Chewtme;;833;38;38;44;water;;8.5;8;0
+"['Strong Jaw'; 'Shell Armor'; 'Swift Swim']";1;1;1;2;1;2;0.25;0.5;1;4;2;0.5;0.5;0.5;1;1;1;1;115;;;485;;Bite Pokémon;90;;1.0;90;;Drednaw;;834;48;68;74;water;rock;115.5;8;0
+"['Ball Fetch'; 'Rattled']";1;1;1;0.5;1;1;1;0.5;1;1;2;1;1;1;1;1;0.5;1;45;;;270;;Puppy Pokémon;50;;0.3;59;;Yamper;;835;40;50;26;electric;;13.5;8;0
+"['Strong Jaw'; 'Competitive']";1;1;1;0.5;1;1;1;0.5;1;1;2;1;1;1;1;1;0.5;1;90;;;490;;Dog Pokémon;60;;1.0;69;;Boltund;;836;90;60;121;electric;;34.0;8;0
+"['Steam Engine'; 'Heatproof'; 'Flash Fire']";1;1;1;1;1;2;0.5;0.5;1;2;2;1;0.5;0.5;1;1;2;2;40;;;240;;Coal Pokémon;50;;0.3;30;;Rolycoly;;837;40;50;30;rock;;12.0;8;0
+"['Steam Engine'; 'Flame Body'; 'Flash Fire']";0.5;1;1;1;0.5;2;0.25;0.5;1;1;4;0.5;0.5;0.5;1;2;1;4;60;;;410;;Coal Pokémon;90;;1.1;80;;Carkol;;838;60;70;50;rock;fire;78.0;8;0
+"['Steam Engine'; 'Flame Body'; 'Flash Fire']";0.5;1;1;1;0.5;2;0.25;0.5;1;1;4;0.5;0.5;0.5;1;2;1;4;80;;;510;;Coal Pokémon;120;;2.8;110;;Coalossal;;839;80;90;30;rock;fire;310.5;8;0
+"['Ripen'; 'Gluttony'; 'Bulletproof']";2;1;2;0.25;2;1;1;2;1;0.25;0.5;4;1;2;1;1;1;0.25;40;;;260;;Apple Core Pokémon;80;;0.2;40;;Applin;;840;40;40;20;grass;dragon;0.5;8;0
+"['Ripen'; 'Gluttony'; 'Hustle']";2;1;2;0.25;2;1;1;2;1;0.25;0.5;4;1;2;1;1;1;0.25;110;;;485;;Apple Wing Pokémon;80;;0.3;70;;Flapple;;841;95;60;70;grass;dragon;1.0;8;0
+"['Ripen'; 'Gluttony'; 'Thick Fat']";2;1;2;0.25;2;1;1;2;1;0.25;0.5;4;1;2;1;1;1;0.25;85;;;485;;Apple Nectar Pokémon;80;;0.4;110;;Appletun;;842;100;80;30;grass;dragon;13.0;8;0
+"['Sand Spit'; 'Shed Skin'; 'Sand Veil']";1;1;1;0;1;1;1;1;1;2;1;2;1;0.5;1;0.5;1;2;57;;;315;;Sand Snake Pokémon;75;;2.2;52;;Silicobra;;843;35;50;46;ground;;7.6;8;0
+"['Sand Spit'; 'Shed Skin'; 'Sand Veil']";1;1;1;0;1;1;1;1;1;2;1;2;1;0.5;1;0.5;1;2;107;;;510;;Sand Snake Pokémon;125;;3.8;72;;Sandaconda;;844;65;70;71;ground;;65.5;8;0
+['Gulp Missile'];0.5;1;1;4;1;0.5;0.5;1;1;1;0;1;1;1;1;2;0.5;0.5;85;;;475;;Gulp Pokémon;55;;0.8;70;;Cramorant;;845;85;95;85;flying;water;18.0;8;0
+"['Swift Swim'; 'Propeller Tail']";1;1;1;2;1;1;0.5;1;1;2;1;0.5;1;1;1;1;0.5;0.5;63;;;280;;Rush Pokémon;40;;0.5;41;;Arrokuda;;846;40;30;66;water;;1.0;8;0
+"['Swift Swim'; 'Propeller Tail']";1;1;1;2;1;1;0.5;1;1;2;1;0.5;1;1;1;1;0.5;0.5;123;;;490;;Skewer Pokémon;60;;1.3;61;;Barraskewda;;847;60;50;136;water;;30.0;8;0
+"['Rattled'; 'Static'; 'Klutz']";0.5;1;1;0.5;0.5;0.5;1;0.5;1;0.5;4;1;1;0.5;2;1;0.5;1;38;;;242;;Baby Pokémon;35;;0.4;40;;Toxel;;848;54;35;40;electric;poison;11.0;8;0
+"['Punk Rock'; 'Minus'; 'Technician']";0.5;1;1;0.5;0.5;0.5;1;0.5;1;0.5;4;1;1;0.5;2;1;0.5;1;98;;;502;;Punk Pokémon;70;;1.6;75;;Toxtricity;;849;114;70;75;electric;poison;40.0;8;0
+"['Flash Fire'; 'White Smoke'; 'Flame Body']";0.5;1;1;1;0.5;0.5;1;2;1;0.25;1;0.5;1;1;1;4;0.5;2;65;;;305;;Radiator Pokémon;45;;0.7;50;;Sizzlipede;;850;50;50;45;fire;bug;1.0;8;0
+"['Flash Fire'; 'White Smoke'; 'Flame Body']";0.5;1;1;1;0.5;0.5;1;2;1;0.25;1;0.5;1;1;1;4;0.5;2;115;;;525;;Radiator Pokémon;65;;3.0;100;;Centiskorch;;851;90;90;65;fire;bug;120.0;8;0
+"['Limber'; 'Technician']";0.5;0.5;1;1;2;1;1;2;1;1;1;1;1;1;2;0.5;1;1;68;;;310;;Tantrum Pokémon;60;;0.6;50;;Clobbopus;;852;50;50;32;fighting;;4.0;8;0
+"['Limber'; 'Technician']";0.5;0.5;1;1;2;1;1;2;1;1;1;1;1;1;2;0.5;1;1;118;;;480;;Tantrum Pokémon;90;;1.6;80;;Grapploct;;853;70;80;42;fighting;;39.0;8;0
+"['Weak Armor'; 'Cursed Body']";0.5;2;1;1;1;0;1;1;2;1;1;1;0;0.5;1;1;1;1;45;;;308;;Black Tea Pokémon;45;;0.1;40;;Sinistea;;854;74;54;50;ghost;;0.2;8;0
+"['Weak Armor'; 'Cursed Body']";0.5;2;1;1;1;0;1;1;2;1;1;1;0;0.5;1;1;1;1;65;;;508;;Black Tea Pokémon;65;;0.2;60;;Polteageist;;855;134;114;70;ghost;;0.4;8;0
+"['Healer'; 'Anticipation'; 'Magic Bounce']";2;2;1;1;1;0.5;1;1;2;1;1;1;1;1;0.5;1;1;1;30;;;265;;Calm Pokémon;45;;0.4;42;;Hatenna;;856;56;53;39;psychic;;3.4;8;0
+"['Healer'; 'Anticipation'; 'Magic Bounce']";2;2;1;1;1;0.5;1;1;2;1;1;1;1;1;0.5;1;1;1;40;;;370;;Serene Pokémon;65;;0.6;57;;Hattrem;;857;86;73;49;psychic;;4.8;8;0
+"['Healer'; 'Anticipation'; 'Magic Bounce']";1;1;0;1;1;0.25;1;1;2;1;1;1;1;2;0.5;1;;1;90;;;510;;Silent Pokémon;95;;2.1;57;;Hatterene;;858;136;103;29;psychic;fairy;5.0;8;0
+"['Prankster'; 'Frisk'; 'Pickpocket']";1;0.25;0;1;2;1;1;1;0.5;1;1;1;1;2;0;1;2;1;45;;;265;;Wily Pokémon;30;;0.4;45;;Impidimp;;859;55;40;50;dark;fairy;5.5;8;0
+"['Prankster'; 'Frisk'; 'Pickpocket']";1;0.25;0;1;2;1;1;1;0.5;1;1;1;1;2;0;1;2;1;60;;;370;;Devious Pokémon;45;;0.8;65;;Morgrem;;860;75;55;70;dark;fairy;12.5;8;0
+"['Prankster'; 'Frisk'; 'Pickpocket']";1;0.25;0;1;2;1;1;1;0.5;1;1;1;1;2;0;1;2;1;120;;;510;;Bulk Up Pokémon;65;;1.5;95;;Grimmsnarl;;861;95;75;60;dark;fairy;61.0;8;0
+"['Reckless'; 'Guts'; 'Defiant']";2;0.5;1;1;2;4;1;1;0;1;1;1;1;1;0;1;1;1;90;;;520;;Blocking Pokémon;101;;1.6;93;;Obstagoon;;862;60;81;95;dark;normal;1.6;8;0
+"['Battle Armor'; 'Tough Claws'; 'Steely Spirit']";0.5;1;0.5;1;0.5;2;2;0.5;1;0.5;2;0.5;0.5;0;0.5;0.5;0.5;1;110;;;440;;Viking Pokémon;100;;0.8;70;;Perrserker;;863;50;60;50;steel;;28.0;8;0
+"['Weak Armor'; 'Perish Body']";0.5;2;1;1;1;0;1;1;2;1;1;1;0;0.5;1;1;1;1;95;;;510;;Coral Pokémon;50;;1.0;60;;Cursola;;864;145;130;30;ghost;;0.4;8;0
+"['Steadfast'; 'Scrappy']";0.5;0.5;1;1;2;1;1;2;1;1;1;1;1;1;2;0.5;1;1;135;;;507;;Wild Duck Pokémon;95;;0.8;62;;Sirfetch'd;;865;68;82;65;fighting;;117.0;8;0
+"['Tangled Feet'; 'Screen Cleaner'; 'Ice Body']";2;2;1;1;1;1;2;1;2;1;1;0.5;1;1;0.5;2;2;1;85;;;520;;Comedian Pokémon;75;;1.5;80;;Mr. Rime;;866;110;100;70;psychic;ice;58.2;8;0
+['Wandering Spirit'];0.5;2;1;0;1;0;1;1;2;2;1;2;0;0.25;1;0.5;1;2;95;;;483;;Grudge Pokémon;145;;1.6;58;;Runerigus;;867;50;105;30;ground;ghost;66.6;8;0
+"['Sweet Veil'; 'Aroma Veil']";0.5;0.5;0;1;1;0.5;1;1;1;1;1;1;1;2;1;1;2;1;40;;;270;;Cream Pokémon;40;;0.2;45;;Milcery;;868;50;61;34;fairy;;0.3;8;0
+"['Sweet Veil'; 'Aroma Veil']";0.5;0.5;0;1;1;0.5;1;1;1;1;1;1;1;2;1;1;2;1;60;;;495;;Cream Pokémon;75;;0.3;65;;Alcremie;;869;110;121;64;fairy;;0.5;8;0
+"['Battle Armor'; 'Defiant']";0.5;0.5;1;1;2;1;1;2;1;1;1;1;1;1;2;0.5;1;1;100;;;470;;Formation Pokémon;100;;3.0;65;;Falinks;;870;70;60;75;fighting;;62.0;8;0
+"['Lightning Rod'; 'Electric Surge']";1;1;1;0.5;1;1;1;0.5;1;1;2;1;1;1;1;1;0.5;1;101;;;435;;Sea Urchin Pokémon;95;;0.3;48;;Pincurchin;;871;91;85;15;electric;;1.0;8;0
+"['Shield Dust'; 'Ice Scales']";1;1;1;1;1;1;4;2;1;0.5;0.5;0.5;1;1;1;4;2;1;25;;;185;;Worm Pokémon;35;;0.3;30;;Snom;;872;45;30;20;ice;bug;3.8;8;0
+"['Shield Dust'; 'Ice Scales']";1;1;1;1;1;1;4;2;1;0.5;0.5;0.5;1;1;1;4;2;1;65;;;475;;Frost Moth Pokémon;60;;1.3;70;;Frosmoth;;873;125;90;65;ice;bug;42.0;8;0
+['Power Spot'];1;1;1;1;1;2;0.5;0.5;1;2;2;1;0.5;0.5;1;1;2;2;125;;;470;;Big Rock Pokémon;135;;2.5;100;;Stonjourner;;874;20;20;70;rock;;520.0;8;0
+['Ice Face'];1;1;1;1;1;2;2;1;1;1;1;0.5;1;1;1;2;2;1;80;;;470;;Penguin Pokémon;110;;1.4;75;;Eiscue;;875;65;90;50;ice;;89.0;8;0
+"['Inner Focus'; 'Synchronize'; 'Psychic Surge']";2;2;1;1;1;1;1;1;0;1;1;1;1;1;0.5;1;1;1;65;;;475;;Emotion Pokémon;55;;0.9;60;;Indeedee;;876;105;95;95;psychic;normal;28.0;8;0
+['Hunger Switch'];2;0.5;1;0.5;2;2;1;0.5;0.5;1;2;1;1;1;0;1;0.5;1;95;;;436;;Two-Sided Pokémon;58;;0.3;58;;Morpeko;;877;70;58;97;electric;dark;3.0;8;0
+"['Sheer Force'; 'Heavy Metal']";0.5;1;0.5;1;0.5;2;2;0.5;1;0.5;2;0.5;0.5;0;0.5;0.5;0.5;1;80;;;330;;Copperderm Pokémon;49;;1.2;72;;Cufant;;878;40;49;40;steel;;100.0;8;0
+"['Sheer Force'; 'Heavy Metal']";0.5;1;0.5;1;0.5;2;2;0.5;1;0.5;2;0.5;0.5;0;0.5;0.5;0.5;1;130;;;500;;Copperderm Pokémon;69;;3.0;122;;Copperajah;;879;80;69;30;steel;;650.0;8;0
+"['Volt Absorb'; 'Hustle'; 'Sand Rush']";1;1;2;0.25;2;1;0.5;0.5;1;0.5;2;2;1;1;1;1;0.5;0.5;100;;;505;;Fossil Pokémon;90;;1.8;90;;Dracozolt;;880;80;70;75;electric;dragon;190.0;8;0
+"['Volt Absorb'; 'Static'; 'Slush Rush']";1;1;1;0.5;1;2;2;0.5;1;1;2;0.5;1;1;1;2;1;1;100;;;505;;Fossil Pokémon;90;;2.3;90;;Arctozolt;;881;90;80;55;electric;ice;150.0;8;0
+"['Water Absorb'; 'Strong Jaw'; 'Sand Rush']";1;1;2;1;2;1;0.25;1;1;1;1;1;1;1;1;1;0.5;0.25;90;;;505;;Fossil Pokémon;100;;2.3;90;;Dracovish;;882;70;80;75;water;dragon;215.0;8;0
+"['Water Absorb'; 'Ice Body'; 'Slush Rush']";1;1;1;2;1;2;1;1;1;2;1;0.25;1;1;1;2;1;0.5;90;;;505;;Fossil Pokémon;100;;2.0;90;;Arctovish;;883;80;90;55;water;ice;175.0;8;0
+"['Light Metal'; 'Heavy Metal'; 'Stalwart']";0.5;1;1;0.5;1;2;1;0.5;1;0.25;2;1;0.5;0;0.5;0.5;0.5;0.5;95;;;535;;Alloy Pokémon;115;;1.8;70;;Duraludon;;884;120;50;85;steel;dragon;40.0;8;0
+"['Clear Body'; 'Infiltrator'; 'Cursed Body']";0.5;2;2;0.5;2;0;0.5;1;2;0.5;1;2;0;0.5;1;1;1;0.5;60;;;270;;Lingering Pokémon;30;;0.5;28;;Dreepy;;885;40;30;82;dragon;ghost;2.0;8;0
+"['Clear Body'; 'Infiltrator'; 'Cursed Body']";0.5;2;2;0.5;2;0;0.5;1;2;0.5;1;2;0;0.5;1;1;1;0.5;80;;;410;;Caretaker Pokémon;50;;11.0;68;;Drakloak;;886;60;50;102;dragon;ghost;11.0;8;0
+"['Clear Body'; 'Infiltrator'; 'Cursed Body']";0.5;2;2;0.5;2;0;0.5;1;2;0.5;1;2;0;0.5;1;1;1;0.5;120;;;600;;Stealth Pokémon;75;;3.0;88;;Dragapult;;887;100;75;142;dragon;ghost;50.0;8;0
+['Intrepid Sword'];0.25;0.5;0;1;0.5;0.5;2;0.5;1;0.5;2;0.5;0.5;0;0.5;0.5;1;1;170;;;720;;Warrior Pokémon;115;;2.8;92;;Zacian;;888;80;115;148;fairy;steel;355.0;8;1
+['Dauntless Shield'];0.25;0.5;0.5;1;1;2;2;1;1;0.5;2;0.5;0.5;0;1;0.25;0.5;1;130;;;720;;Warrior Pokémon;145;;2.9;92;;Zamazenta ;;889;80;145;128;fighting;steel;785.0;8;1
+['Pressure'];0.5;1;2;0.5;1;0.5;0.5;1;1;0.25;2;2;1;0.5;2;1;1;0.5;85;;;690;;Gigantic Pokémon;95;;20.0;140;;Eternatus;;890;145;95;130;poison;dragon;950.0;8;1
+['Create Database'];0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;120;;;720;;PSQL Pokémon;120;;;120;;Mr. Samet;;999;120;120;120;info;big data;;9;1
