@@ -14,6 +14,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import misc.read2;
 import org.postgresql.util.PSQLException;
 import sibdex.pokedata.pdI;
@@ -34,51 +36,28 @@ public class ctrl {
     private static final CLIAction[] CLIA = new CLIAction[] {
         new CLIAction("insert") {
             @Override
-            public void does() {
-                String tmp;
-                ArrayList<String> tc;
-                ArrayList<String> tvr;
-                ArrayList<String[]> tv;
-                ResultSetMetaData MD;
-                System.out.println("Give the table name where to insert data :");
-                String tn = read2.S();
+            public void does() throws SQLException {
+                if (!checkAccess(new int[] 
+                    {TRAINERLVL, SCIENTISTLVL}
+                )) {
+                    System.err.println("Access denied.");
+                    //return;
+                };
+                
                 try {
-                    MD = CNX.createStatement()
-                            .executeQuery("SELECT * FROM "+tn).getMetaData();
-                } catch (SQLException ex) {
-                    System.err.println(ex.getMessage());
-                    return;
+                    pdI I = new pdI(CNX);
+                    String s = I.send();
+                    System.out.println(s);
+                    I.exec(CNX, s);
+                } catch (UnsupportedOperationException uoe) {
+                    System.err.println(uoe.getMessage());
                 }
-                try {
-                    int c=MD.getColumnCount();
-
-                    for (int k=1;k<=c;k++) {
-                        System.out.print(MD.getColumnName(k)+":"+MD.getColumnTypeName(k)+" ");
-                    }
-                } catch (SQLException ex) {
-                    System.err.println(ex.getMessage());
-                    return;
-                }
-                System.out.println("Give column names to insert. Empty string to stop.");
-                tc = new ArrayList<String>();
-                // add limit on the column name
-                while (!(tmp=read2.S()).equals("")) {
-                    tc.add(tmp);
-                }
-                System.out.println("Give values. Empty string to stop, + to continue.");
-                tv = new ArrayList<String[]>();
-                // add limit on the column name
-                int i=0;
-                do {
-                    System.out.println(++i);
-                    tvr=new ArrayList<String>();
-                    for(String s:tc) {
-                        System.out.print(s+":");
-                        tvr.add(read2.S());
-                    }
-                    tv.add(tvr.toArray(new String[0]));
-                } while (!"".equals(read2.S()));
-                add(new pdI(tn, tc.toArray(new String[0]), tv.toArray(new String[0][0])));
+            }
+        },
+        new CLIAction("whateveryouwant") {
+            @Override
+            public void does() throws SQLException {
+                System.out.println("Check ctrl.jav line 34 to add other CLIActions. They are listed automatically.");
             }
         }
     };
@@ -104,7 +83,8 @@ public class ctrl {
         
     public static void access(String[] uinfo) {
         String[] id;
-        id=(uinfo!=null&&uinfo.length!=2)?uinfo:securePrompt.request(true, true);
+        boolean t;
+        id=(t=uinfo!=null&&uinfo.length==2)?uinfo:securePrompt.request(true, true);
         String usn = id[0];
         String pw = id[1];
         
@@ -140,11 +120,11 @@ public class ctrl {
                 } catch (SQLException ex1) {
                     System.out.println(ex1.getMessage());
                     System.err.println("Error occured while initializing. Retrying...");
-                    access(id);
+                    access();
                 }                
             } else if (ex.getMessage().contains("authentification par mot de passe échouée pour l'utilisateur")) {
                 System.err.println("Wrong username or password.");
-                access(id);
+                access();
             } else {
                 System.out.println(ex.getMessage());
             }
@@ -159,7 +139,7 @@ public class ctrl {
             System.err.println("Access couldn't be established for unknown reason. Please try again.");
             return;
         }
-        CAX=fa(id[2]);
+        CAX=t?AT[2]:fa(id[2]);
     }
 
     /**
@@ -236,7 +216,12 @@ public class ctrl {
     public static boolean read_action(String a) {
         for(CLIAction action:CLIA) {
             if (a.toLowerCase().equals(action.name)) {
-                action.does();
+                try {
+                    action.does();
+                } catch (SQLException ex) {
+                    System.err.println(ex.getMessage());
+                    Logger.getLogger(ctrl.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 return true;
             }
         }
@@ -270,7 +255,7 @@ public class ctrl {
             name=nm;
         }
         
-        public abstract void does();
+        public abstract void does() throws SQLException;
 
     }
     //Récupère seulement les ID et les Noms pour l'affichage général : chaque paire correspond à 1 poké

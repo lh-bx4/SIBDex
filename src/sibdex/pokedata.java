@@ -7,13 +7,16 @@ package sibdex;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import misc.read2;
 import misc.util;
 import static misc.util.*;
+import static sibdex.ctrl.add;
 
 /**
  *
@@ -29,7 +32,7 @@ public abstract class pokedata {
     }
     
     public String send(String[] s) {
-        return util.c(s, ' ')+";";
+        return util.c(s, " ")+";";
     }
     
     public void exec(Connection c, String q) {
@@ -46,38 +49,102 @@ public abstract class pokedata {
      */
     public static class pdI extends pokedata {
         private final String tName;
-        private final String[] tCols;
-        private final String[][] tVals;
+        private final ArrayList<String> tCols;
+        private final ArrayList<ArrayList<String>> tVals;
         
-        public pdI(String tn, String[] tc, String[][] tv) {
+        public pdI(String tn, ArrayList<String> tc, ArrayList<ArrayList<String>> tv) {
             super(INSERT);
             this.tName=tn;
             this.tCols=tc;
             this.tVals=tv;
         }
-                
-        public String send() {
+        public pdI(Connection c) throws SQLException {
+            super(INSERT);
+            String tmp;
+            ArrayList<String> tc;                                               // columns
+            ArrayList<String> tvr;                                              // table value rows
+            ArrayList<ArrayList<String>> tv;                                    // table values
+            ResultSetMetaData MD;
+            ResultSet Rs;
+            ArrayList<Boolean> b;
+            String tn ="";
+            System.out.println("Choose the table name where to insert data :");
+            Rs = c.createStatement()
+                .executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='chen'");
+            ArrayList<String> tns = new ArrayList<String>();
+            while(Rs.next()) {
+                tns.add(Rs.getString("table_name"));
+            }
+            b = read2.ArrowSelector(tns, true, false);
+            for(int k=0;k<tns.size();k++) if (b.get(k)) tn=tns.get(k);
+            if (tn.equals("")) throw new UnsupportedOperationException("You must provide a table name in order to insert.");
+
+            MD = c.createStatement()
+                .executeQuery("SELECT * FROM "+tn).getMetaData();
+                        
+            int n=MD.getColumnCount();
+            ArrayList<String> 
+                cols = new ArrayList<String>(), 
+                colstype=new ArrayList<String>()
+            ;
+            for (int k=1;k<=n;k++) {
+                cols.add(MD.getColumnName(k));
+                //colstype.add(MD.getColumnTypeName(k));
+            }
+            
+            // taking choosed columns
+            System.out.println("Give column names to insert. Empty . to stop.");
+            tc = new ArrayList<String>();
+            b = read2.ArrowSelector(cols,false,true);
+            for(int k=0;k<cols.size();k++) {
+                if (b.get(k)) {
+                    tc.add(cols.get(k));
+                    colstype.add(MD.getColumnTypeName(k+1));
+                }
+            }
+            
+            System.out.println("Give values. Empty string to stop, + to continue.");
+            tv = new ArrayList<ArrayList<String>>();
+            // add limit on the column name
+            int i=0;
+            do {
+                System.out.println(++i);
+                tvr=new ArrayList<String>();
+                for(int k=0;k<tc.size();k++) {
+                    System.out.print(colstype.get(k)+":"+tc.get(k)+":");
+                    tvr.add(util.f(read2.S(), colstype.get(k)));
+                }
+                System.out.print(util.d(tvr, ",", BRACKETS)+",?");
+                tv.add(tvr);
+            } while (!"".equals(read2.S()));
+            tName=tn;
+            tCols=tc;
+            tVals=tv;
+        }
+        
+        public String send() throws UnsupportedOperationException {
             // TODO see if all lines have the right format
             boolean t1;
-            if (t1=tCols.length!=0) {
-                if (tCols.length!=tVals[0].length) System.err.println("Different valueq length while inserting.");
+            if (t1=tCols.size()!=0) // check if there are more than 0 column selected
+            {
+                if (tCols.size()!=tVals.get(0).size()) 
+                    throw new UnsupportedOperationException("Different values length while inserting.");
             } else {
-                System.err.println("Empty tCols is deprecated");
+                //throw new UnsupportedOperationException("Empty tCols is deprecated.");
             }
             
             ArrayList<String> t = new ArrayList<>();
-            for(String[] r:tVals) {
-                t.add(util.d(r,',', BRACKETS));
-            }
+            for(ArrayList<String> r:tVals)
+                t.add(util.d(r,",", BRACKETS));
             
             return super.send(new String[] 
                 {
                     "INSERT",
                     "INTO",
                     tName,
-                    t1?util.e(util.c(tCols,','), BRACKETS):"",
+                    t1?util.e(util.c(tCols,","), BRACKETS):"",
                     "VALUES",
-                    util.c(t,',')
+                    util.c(t,",")
                 }
             );
         }   

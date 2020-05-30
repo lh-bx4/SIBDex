@@ -5,11 +5,6 @@
  */
 package sibdex;
 
-import java.sql.SQLException;
-import java.sql.SQLTimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import static misc.read2.S;
 import static misc.read2.pS;
 import static sibdex.pokedata.*;
 
@@ -21,12 +16,13 @@ public class cli {
     
     public static void main(String[] args) {
         run();
+        System.exit(0);
     }
     
     public static void run() {
        
         do {
-            ctrl.access();
+            ctrl.access(new String[] {"postgres", "su"});
         } while(!ctrl.isAccessible());
         
         String C;
@@ -39,10 +35,8 @@ public class cli {
             
             
         } while(ctrl.read_action(pS()));
-        return;
-
     }
-    
+    /*
     public static void test1() {
         pdI t = new pdI("pokemon", new String[] {"health", "name"}, new String[][] {
             {"20", "zerma"},
@@ -51,4 +45,5 @@ public class cli {
         // why my CNx is null pointer ?
         ctrl.add(t);
     }
+*/
 }

@@ -8,8 +8,10 @@ package sibdex;
 import java.awt.Event;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.swing.JComponent;
 
 
 /**
@@ -21,26 +23,21 @@ public final class securePrompt extends javax.swing.JDialog {
     private securePrompt(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                if (e.getKeyCode()==e.VK_ENTER) 
-                    validateBtnActionPerformed(new ActionEvent(e.getSource(), e.getID(), ""));
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {}
-
+        KeyAdapter kadp = new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                
+                if (e.getKeyCode()==KeyEvent.VK_ENTER) 
+                    validateBtnActionPerformed(new ActionEvent(e.getSource(), e.getID(), ""));
             }
-        });
+        };
+        validateBtn.addKeyListener(kadp);
+        pwdTextField2.addKeyListener(kadp);
     }
     
     public static String[] request(boolean usn, boolean pwd) {
         securePrompt sP = new securePrompt(new Frame(), true);
         sP.usnTextField.setEnabled(usn);
+        sP.usnTextField.requestFocus();
         sP.pwdTextField2.setEnabled(pwd);
         sP.setVisible(true);
         return new String[]  {
@@ -69,6 +66,7 @@ public final class securePrompt extends javax.swing.JDialog {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "GUEST", "TRAINER", "SCIENTIST", "DEVMODE" }));
+        jComboBox1.setBorder(null);
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
