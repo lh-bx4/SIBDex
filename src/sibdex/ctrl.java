@@ -258,26 +258,34 @@ public class ctrl {
         public abstract void does() throws SQLException;
 
     }
-    //Récupère seulement les ID et les Noms pour l'affichage général : chaque paire correspond à 1 poké
-    //On n'a aucun intérêt à récup toutes les datas car elles ne seront pas toutes display
-    protected ArrayList getAllPokemon(Connection con) throws SQLException{
+     protected ArrayList getPokemonStmt(Connection con, String psql) throws SQLException{
         Statement stmt = con.createStatement();
-        String psql = "SELECT id,name FROM pokemon" ;
         ResultSet rs = stmt.executeQuery(psql);
-        //On recup les pokémons sous forme d'une ArrayList contenant des paires (id,name)
-        ArrayList<ArrayList<String>> pokemons = new ArrayList<ArrayList<String>>();
+        //On recup les pokÃ©mons sous forme d'une ArrayList contenant des pokÃ©mons
+        ArrayList<Pokemon> pokemons = new ArrayList<Pokemon>();
         while(rs.next()){
-            ArrayList<String> pokemon = new ArrayList<String>();
-            int id = rs.getInt("id");
-            String name = rs.getString("name");
-            pokemon.add(Integer.toString(id));
-            pokemon.add(name);
+            Pokemon pokemon = new Pokemon();
+            pokemon.setId(rs.getInt("id"));
+            pokemon.setName(rs.getString("name"));
+            pokemon.setType1(rs.getString("type1"));
+            pokemon.setType2(rs.getString("type2"));
+            pokemon.setGen(rs.getInt("gen"));
             pokemons.add(pokemon);
         }
         rs.close();
         return(pokemons);
     }
-    protected Pokemon getPokemon(Connection con,int id) throws SQLException{
+    protected ArrayList getAllPokemon(Connection con) throws SQLException{
+        return(getPokemonStmt(con, "SELECT * FROM pokemon"));
+    }
+    protected ArrayList getPokemonByType(Connection con, String type) throws SQLException{
+        return(getPokemonStmt(con, "SELECT * FROM pokemon WHERE type1 ='"+type+"' OR type2= '"+type+"'"));            
+    }
+    protected ArrayList getPokemonByName(Connection con, String name) throws SQLException{
+        return(getPokemonStmt(con, "SELECT * FROM pokemon WHERE name LIKE '"+name+"%'"));
+    }
+    //rÃ©cupÃ©ration d'un pokÃ©mon via son ID 
+    protected Pokemon getPokemonByID(Connection con,int id) throws SQLException{
         Pokemon pokemon;
         Statement stmt = con.createStatement();
         String psql = "Select * FROM pokemon WHERE id = "+Integer.toString(id);
@@ -285,12 +293,118 @@ public class ctrl {
         // pokemon hasn't been initialised
         pokemon = new Pokemon();
         if(rs.next()){
+        pokemon.setName(rs.getString("name"));
+        pokemon.setType1(rs.getString("type1"));
+        pokemon.setType2(rs.getString("type2"));
         pokemon.setId(rs.getInt("id"));
-        pokemon.setAtk(rs.getInt("attack"));
-        pokemon.setDefense(rs.getInt("Defense"));
-        
+        pokemon.setAttack(rs.getInt("attack"));
+        pokemon.setSpeattack(rs.getInt("spe_attack"));
+        pokemon.setSpedefense(rs.getInt("spe_defense"));
+        pokemon.setDefense(rs.getInt("defense"));
+        pokemon.setSpeed(rs.getInt("speed"));
+        pokemon.setHealth(rs.getInt("health"));
+        pokemon.setExperience(rs.getInt("experience"));
+        pokemon.setHeight(rs.getInt("height"));
+        pokemon.setWeight(rs.getInt("weight"));
+        pokemon.setGen(rs.getInt("gen"));
+        pokemon.setAgainst_bug(rs.getInt("against_bug"));
+        pokemon.setAgainst_dark(rs.getInt("against_dark"));
+        pokemon.setAgainst_dragon(rs.getInt("against_dragon"));
+        pokemon.setAgainst_electric(rs.getInt("against_electric"));
+        pokemon.setAgainst_fairy(rs.getInt("against_fairy"));
+        pokemon.setAgainst_fight(rs.getInt("against_fight"));
+        pokemon.setAgainst_flying(rs.getInt("against_flying"));
+        pokemon.setAgainst_fire(rs.getInt("against_fire"));
+        pokemon.setAgainst_ghost(rs.getInt("against_ghost"));
+        pokemon.setAgainst_grass(rs.getInt("against_grass"));
+        pokemon.setAgainst_ground(rs.getInt("against_ground"));
+        pokemon.setAgainst_ice(rs.getInt("against_ice"));
+        pokemon.setAgainst_normal(rs.getInt("against_normal"));
+        pokemon.setAgainst_poison(rs.getInt("against_poison"));
+        pokemon.setAgainst_psychic(rs.getInt("against_psychic"));
+        pokemon.setAgainst_rock(rs.getInt("against_rock"));
+        pokemon.setAgainst_steel(rs.getInt("against_steel"));
+        pokemon.setAgainst_water(rs.getInt("against_water"));
         }
+        rs.close();
         return(pokemon);
     }
-
+    protected void PrintPkmnList(ArrayList<Pokemon> pokemons){
+        for(int i=0; i<= pokemons.size();i++){
+            System.out.println(
+                    pokemons.get(i).id
+                    + " | " + pokemons.get(i).name
+                    + " | TYPE1 : "+ pokemons.get(i).type1
+                    + " | TYPE2 : "+ pokemons.get(i).type2
+                    + " | GEN : " + pokemons.get(i).gen);
+        }
+    }
+    
+    //Cherche une sous Ã©volution s'il n'y en a aucune, modifie le boolean dÃ©finit dans la classe Pokemon
+    protected Pokemon getDownEvolution(Connection con, Pokemon pokemon) throws SQLException {
+        String psql = "SELECT pd.id FROM evolve e JOIN pokemon pd ON e.down=pd.id JOIN pokemon pu ON e.up=pu.id WHERE pu.id ="+pokemon.id;
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(psql);
+        int id = 0 ;
+        Pokemon pokemonR = new Pokemon();
+        if(rs.next()){
+            id = rs.getInt("id");
+            pokemonR = getPokemonByID(con,id);
+            pokemon.setHasDownEv(true);
+        } else {
+            pokemon.setHasDownEv(false);
+        }
+        return(pokemonR);
+    }
+    //Cherche une surÃ©volution s'il n'y en a aucune renvoie un "pokemon" ayant un ID de 0
+    protected Pokemon getUpEvolution(Connection con, Pokemon pokemon) throws SQLException{
+        String psql = "SELECT pu.id FROM evolve e JOIN pokemon pd ON e.down = pd.id JOIN pokemon pu ON e.up = pu.id WHERE pd.id ="+pokemon.id;
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(psql);
+        int id = 0 ;
+        Pokemon pokemonR = new Pokemon();
+        if(rs.next()){
+            id = rs.getInt("id");
+            pokemonR = getPokemonByID(con,id);
+            pokemon.setHasUpEv(true);
+        } else {
+            pokemon.setHasUpEv(false);
+        }
+        return(pokemonR);
+    }
+    
+    //retourne une arraylist contenant la famille d'Ã©volution du pokÃ©mon
+    protected ArrayList getPokemonEvolutions(Connection con, Pokemon pokemon) throws SQLException{
+        ArrayList<Pokemon> evolutions = new ArrayList();
+        Pokemon Up = new Pokemon();
+        Up = getUpEvolution(con, pokemon);
+        Pokemon Down = new Pokemon();
+        Down = getDownEvolution(con,pokemon);
+        evolutions.add(Down);
+        evolutions.add(Up);
+        //si pas d'Ã©volutions ou dÃ©jÃ  1 Ã©volution dessus / 1 Ã©volution dessous : STOP et renvoie
+        if(((pokemon.hasDownEv == false) && (pokemon.hasUpEv == false)) ||((pokemon.hasDownEv == true)&&(pokemon.hasUpEv == true))){
+          return(evolutions);
+        } else {
+            //sinon si il n'y a pas dessous, teste si il y a 2 dessus et si oui l'ajoute
+            if(pokemon.hasDownEv == false){
+                Pokemon UpUp = getUpEvolution(con,Up);
+                if(Up.hasUpEv == true){
+                    evolutions.add(Up);
+                }
+            //si il y a dessous teste si il y a 2 dessous et si oui l'ajoute
+            } else {
+                Pokemon DownDown = getDownEvolution(con,Down);
+                if(Down.hasDownEv == true){
+                    evolutions.add(DownDown);
+                }
+            }
+        }
+        return(evolutions);
+    }
+    protected void PokemonDisplay(Connection con, int id) throws SQLException{
+        System.out.println(getPokemonByID(con,id));
+        System.out.println("----- E V O L U T I O N S -----");
+        
+    }
 }
