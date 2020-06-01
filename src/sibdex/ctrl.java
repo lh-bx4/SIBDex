@@ -54,19 +54,39 @@ public class ctrl {
                 }
             }
         },
-        new CLIAction("whateveryouwant") {
+        //affiche tous les pokémons existants dans le pokédex (affichage simplifié)
+        new CLIAction("see all") {
             @Override
             public void does() throws SQLException {
-                System.out.println("Check ctrl.jav line 34 to add other CLIActions. They are listed automatically.");
+              PrintPokemonList(getAllPokemon(CNX));
             }
+        },
+        //affiche les pokémons commençant par le nom spécifié
+        new CLIAction("search by name"){
+            @Override
+            public void does() throws SQLException{
+            System.out.println("Name ?");
+            String name = read2.pS();
+            //première lettre du nom en majuscule quoi qu'il arrive
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+            PrintPokemonList(getPokemonByName(CNX, name));
         }
+        },
+        //affiche les données d'un seul pokémon
+        new CLIAction("get pokemon"){
+           @Override
+           public void does()throws SQLException{
+               System.out.println("ID ?");
+               int id = read2.pI();
+               PokemonDisplay(CNX, id);
+           }
+        },
     };
     private static final String[] sql_inits = new String[] {
         "./src/assets/sql/create.sql",
         "./src/assets/sql/insert.sql",
     };
     private static AccessType CAX;
-    
     /**
      * see defined accestype
      * @return if access is correclty sat up
@@ -79,8 +99,7 @@ public class ctrl {
      */
     public static void access() {
         access(null);
-    } 
-        
+    }     
     public static void access(String[] uinfo) {
         String[] id;
         boolean t;
@@ -141,7 +160,6 @@ public class ctrl {
         }
         CAX=t?AT[2]:fa(id[2]);
     }
-
     /**
      * find access
      * @param acnm accesslevel name
@@ -150,14 +168,12 @@ public class ctrl {
     private static AccessType fa(String acnm) {
         for(AccessType r:AT) if (acnm.equals(r.name)) return r;
         return null;
-    }
-    
+    }  
     private static boolean checkAccess(int[] permission) {
         int m = permission[0];
         for(int ab:permission)m=ab<m?ab:m;
         return CAX!=null?CAX.level>=m:false;
-    }
-    
+    }  
     private static boolean isDB(Connection c) throws SQLException {
         ResultSet resultSet = c.getMetaData().getCatalogs();
         while (resultSet.next()) {
@@ -183,8 +199,7 @@ public class ctrl {
             System.err.println("Failed to Execute" + aSQLScriptFilePath +". The error is"+ e.getMessage());
         }
         return isScriptExecuted;
-    }
-    
+    }   
     protected static void add(pdI I){
         if (!checkAccess(new int[] 
             {TRAINERLVL, SCIENTISTLVL}
@@ -194,16 +209,13 @@ public class ctrl {
         };
         System.out.println(I.send());
         I.exec(CNX, I.send());
-    }
-    
+    }  
     protected void update(){
         
-    }
-    
+    }   
     protected void remove(){
        
-    }
-    
+    } 
     public static void pactions() {
         System.out.println("LOG TYPE : "+CAX.name);
         System.out.print("Actions:{ ");
@@ -211,8 +223,7 @@ public class ctrl {
             System.out.print(action.name+" ");
         }
         System.out.println("quit }");
-    }
-    
+    }  
     public static boolean read_action(String a) {
         for(CLIAction action:CLIA) {
             if (a.toLowerCase().equals(action.name)) {
@@ -226,8 +237,7 @@ public class ctrl {
             }
         }
         return !a.toLowerCase().equals("quit");
-    }
-       
+    }      
     private static class AccessType {
         protected final int level;
         protected final String name;
@@ -246,7 +256,6 @@ public class ctrl {
             this.name=nm;
         }
     }
-    
     private static abstract class CLIAction {
 
         public final String name;
@@ -258,7 +267,8 @@ public class ctrl {
         public abstract void does() throws SQLException;
 
     }
-     protected ArrayList getPokemonStmt(Connection con, String psql) throws SQLException{
+     protected static ArrayList getPokemonStmt(Connection con, String psql) throws SQLException{
+
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(psql);
         //On recup les pokÃ©mons sous forme d'une ArrayList contenant des pokÃ©mons
@@ -269,23 +279,23 @@ public class ctrl {
             pokemon.setName(rs.getString("name"));
             pokemon.setType1(rs.getString("type1"));
             pokemon.setType2(rs.getString("type2"));
-            pokemon.setGen(rs.getInt("gen"));
+            //pokemon.setGen(rs.getInt("gen"));
             pokemons.add(pokemon);
         }
         rs.close();
         return(pokemons);
     }
-    protected ArrayList getAllPokemon(Connection con) throws SQLException{
+    protected static ArrayList getAllPokemon(Connection con) throws SQLException{
         return(getPokemonStmt(con, "SELECT * FROM pokemon"));
     }
-    protected ArrayList getPokemonByType(Connection con, String type) throws SQLException{
+    protected static ArrayList getPokemonByType(Connection con, String type) throws SQLException{
         return(getPokemonStmt(con, "SELECT * FROM pokemon WHERE type1 ='"+type+"' OR type2= '"+type+"'"));            
     }
-    protected ArrayList getPokemonByName(Connection con, String name) throws SQLException{
+    protected static ArrayList getPokemonByName(Connection con, String name) throws SQLException{
         return(getPokemonStmt(con, "SELECT * FROM pokemon WHERE name LIKE '"+name+"%'"));
     }
     //rÃ©cupÃ©ration d'un pokÃ©mon via son ID 
-    protected Pokemon getPokemonByID(Connection con,int id) throws SQLException{
+    protected static Pokemon getPokemonByID(Connection con,int id) throws SQLException{
         Pokemon pokemon;
         Statement stmt = con.createStatement();
         String psql = "Select * FROM pokemon WHERE id = "+Integer.toString(id);
@@ -297,51 +307,50 @@ public class ctrl {
         pokemon.setType1(rs.getString("type1"));
         pokemon.setType2(rs.getString("type2"));
         pokemon.setId(rs.getInt("id"));
-        pokemon.setAttack(rs.getInt("attack"));
-        pokemon.setSpeattack(rs.getInt("spe_attack"));
-        pokemon.setSpedefense(rs.getInt("spe_defense"));
-        pokemon.setDefense(rs.getInt("defense"));
-        pokemon.setSpeed(rs.getInt("speed"));
-        pokemon.setHealth(rs.getInt("health"));
-        pokemon.setExperience(rs.getInt("experience"));
-        pokemon.setHeight(rs.getInt("height"));
-        pokemon.setWeight(rs.getInt("weight"));
-        pokemon.setGen(rs.getInt("gen"));
-        pokemon.setAgainst_bug(rs.getInt("against_bug"));
-        pokemon.setAgainst_dark(rs.getInt("against_dark"));
-        pokemon.setAgainst_dragon(rs.getInt("against_dragon"));
-        pokemon.setAgainst_electric(rs.getInt("against_electric"));
-        pokemon.setAgainst_fairy(rs.getInt("against_fairy"));
-        pokemon.setAgainst_fight(rs.getInt("against_fight"));
-        pokemon.setAgainst_flying(rs.getInt("against_flying"));
-        pokemon.setAgainst_fire(rs.getInt("against_fire"));
-        pokemon.setAgainst_ghost(rs.getInt("against_ghost"));
-        pokemon.setAgainst_grass(rs.getInt("against_grass"));
-        pokemon.setAgainst_ground(rs.getInt("against_ground"));
-        pokemon.setAgainst_ice(rs.getInt("against_ice"));
-        pokemon.setAgainst_normal(rs.getInt("against_normal"));
-        pokemon.setAgainst_poison(rs.getInt("against_poison"));
-        pokemon.setAgainst_psychic(rs.getInt("against_psychic"));
-        pokemon.setAgainst_rock(rs.getInt("against_rock"));
-        pokemon.setAgainst_steel(rs.getInt("against_steel"));
-        pokemon.setAgainst_water(rs.getInt("against_water"));
+//        pokemon.setAttack(rs.getInt("attack"));
+//        pokemon.setSpeattack(rs.getInt("spe_attack"));
+//        pokemon.setSpedefense(rs.getInt("spe_defense"));
+//        pokemon.setDefense(rs.getInt("defense"));
+//        pokemon.setSpeed(rs.getInt("speed"));
+//        pokemon.setHealth(rs.getInt("health"));
+//        pokemon.setExperience(rs.getInt("experience"));
+//        pokemon.setHeight(rs.getInt("height"));
+//        pokemon.setWeight(rs.getInt("weight"));
+//        pokemon.setGen(rs.getInt("gen"));
+//        pokemon.setAgainst_bug(rs.getInt("against_bug"));
+//        pokemon.setAgainst_dark(rs.getInt("against_dark"));
+//        pokemon.setAgainst_dragon(rs.getInt("against_dragon"));
+//        pokemon.setAgainst_electric(rs.getInt("against_electric"));
+//        pokemon.setAgainst_fairy(rs.getInt("against_fairy"));
+//        pokemon.setAgainst_fight(rs.getInt("against_fight"));
+//        pokemon.setAgainst_flying(rs.getInt("against_flying"));
+//        pokemon.setAgainst_fire(rs.getInt("against_fire"));
+//        pokemon.setAgainst_ghost(rs.getInt("against_ghost"));
+//        pokemon.setAgainst_grass(rs.getInt("against_grass"));
+//        pokemon.setAgainst_ground(rs.getInt("against_ground"));
+//        pokemon.setAgainst_ice(rs.getInt("against_ice"));
+//        pokemon.setAgainst_normal(rs.getInt("against_normal"));
+//        pokemon.setAgainst_poison(rs.getInt("against_poison"));
+//        pokemon.setAgainst_psychic(rs.getInt("against_psychic"));
+//        pokemon.setAgainst_rock(rs.getInt("against_rock"));
+//        pokemon.setAgainst_steel(rs.getInt("against_steel"));
+//        pokemon.setAgainst_water(rs.getInt("against_water"));
         }
         rs.close();
         return(pokemon);
     }
-    protected void PrintPkmnList(ArrayList<Pokemon> pokemons){
-        for(int i=0; i<= pokemons.size();i++){
+    protected static void PrintPokemonList(ArrayList<Pokemon> pokemons){
+        for(int i=0; i<= pokemons.size()-1;i++){
             System.out.println(
                     pokemons.get(i).id
                     + " | " + pokemons.get(i).name
                     + " | TYPE1 : "+ pokemons.get(i).type1
-                    + " | TYPE2 : "+ pokemons.get(i).type2
-                    + " | GEN : " + pokemons.get(i).gen);
+                    + " | TYPE2 : "+ pokemons.get(i).type2);
+                    //+ " | GEN : " + pokemons.get(i).gen);
         }
     }
-    
     //Cherche une sous Ã©volution s'il n'y en a aucune, modifie le boolean dÃ©finit dans la classe Pokemon
-    protected Pokemon getDownEvolution(Connection con, Pokemon pokemon) throws SQLException {
+    protected static Pokemon getDownEvolution(Connection con, Pokemon pokemon) throws SQLException {
         String psql = "SELECT pd.id FROM evolve e JOIN pokemon pd ON e.down=pd.id JOIN pokemon pu ON e.up=pu.id WHERE pu.id ="+pokemon.id;
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(psql);
@@ -354,10 +363,11 @@ public class ctrl {
         } else {
             pokemon.setHasDownEv(false);
         }
+        rs.close();
         return(pokemonR);
     }
     //Cherche une surÃ©volution s'il n'y en a aucune renvoie un "pokemon" ayant un ID de 0
-    protected Pokemon getUpEvolution(Connection con, Pokemon pokemon) throws SQLException{
+    protected static Pokemon getUpEvolution(Connection con, Pokemon pokemon) throws SQLException{
         String psql = "SELECT pu.id FROM evolve e JOIN pokemon pd ON e.down = pd.id JOIN pokemon pu ON e.up = pu.id WHERE pd.id ="+pokemon.id;
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(psql);
@@ -370,11 +380,11 @@ public class ctrl {
         } else {
             pokemon.setHasUpEv(false);
         }
+        rs.close();
         return(pokemonR);
     }
-    
     //retourne une arraylist contenant la famille d'Ã©volution du pokÃ©mon
-    protected ArrayList getPokemonEvolutions(Connection con, Pokemon pokemon) throws SQLException{
+    protected static ArrayList getPokemonEvolutions(Connection con, Pokemon pokemon) throws SQLException{
         ArrayList<Pokemon> evolutions = new ArrayList();
         Pokemon Up = new Pokemon();
         Up = getUpEvolution(con, pokemon);
@@ -402,9 +412,10 @@ public class ctrl {
         }
         return(evolutions);
     }
-    protected void PokemonDisplay(Connection con, int id) throws SQLException{
+    protected static void PokemonDisplay(Connection con, int id) throws SQLException{
         System.out.println(getPokemonByID(con,id));
         System.out.println("----- E V O L U T I O N S -----");
+        PrintPokemonList(getPokemonEvolutions(con,getPokemonByID(con,id)));
         
     }
 }
