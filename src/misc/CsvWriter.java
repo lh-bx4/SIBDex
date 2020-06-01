@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import java.util.stream.*;
 import static java.util.stream.StreamSupport.stream;
 /**
- *
+ * @deprecated 
  * @author Louis
  */
 public class CsvWriter {

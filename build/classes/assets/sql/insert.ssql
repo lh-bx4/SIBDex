@@ -1,0 +1,35 @@
+INSERT INTO type (fr_name, en_name) VALUES 
+    ('Acier', 'steel'),
+    ('Combat', 'fighting'),
+    ('Dragon', 'dragon'),
+    ('Eau', 'water'),
+    ('Electik', 'electric'),
+    ('Fée', 'fairy'),
+    ('Feu', 'fire'),
+    ('Glace', 'ice'),
+    ('Insecte', 'bug'),
+    ('Normal', 'normal'),
+    ('Plante', 'grass'),
+    ('Poison', 'poison'),
+    ('Psy', 'psychic'),
+    ('Roche', 'rock'),
+    ('Sol', 'ground'),
+    ('Spectre', 'ghost'),
+    ('Ténèbres', 'dark'),
+    ('Vol', 'flying'),
+    ('???','???'),
+    ('info', 'info'),
+    ('big data', 'big data');
+-- INSERT INTO attack (name, type) VALUES
+--     ('Vive-attaque','ground'),
+--    ('Bolle Êlek','electric');
+--INSERT INTO trainer VALUES ('Sasha');
+-- INSERT INTO pokemon VALUES 
+--     (25,'Pikachu',0,35,5,null),
+--     (172,'Pichu',0,20,5,null),
+--     (26,'Raichu',0,60,5,null)
+-- ;
+
+
+
+--INSERT INTO evolve VALUES (172,25),(25,26);

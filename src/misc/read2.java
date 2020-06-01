@@ -51,7 +51,7 @@ public class read2 {
             for(char c:in.toCharArray()) {
                 switch (c) {
                     case '<':
-                        i=(i-1)%st.size();
+                        i=(i-1+st.size())%st.size();
                         System.out.print("<"+st.get(i));
                         break;
                     case '>':

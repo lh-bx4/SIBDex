@@ -6,7 +6,11 @@
 package sibdex;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -17,6 +21,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import misc.read2;
+import misc.util;
 import org.postgresql.util.PSQLException;
 import sibdex.pokedata.pdI;
 
@@ -59,11 +64,19 @@ public class ctrl {
             public void does() throws SQLException {
                 System.out.println("Check ctrl.jav line 34 to add other CLIActions. They are listed automatically.");
             }
-        }
+        },
+
     };
+    /*
+    private interface quickQuery {
+        String quickdo(String[] args);
+    }
+    */
+    
+    
     private static final String[] sql_inits = new String[] {
-        "./src/assets/sql/create.sql",
-        "./src/assets/sql/insert.sql",
+        "./src/assets/sql/create.ssql",
+        "./src/assets/sql/insert.ssql",
     };
     private static AccessType CAX;
     
@@ -81,7 +94,7 @@ public class ctrl {
         access(null);
     } 
         
-    public static void access(String[] uinfo) {
+    public static void access(String[] uinfo)  {
         String[] id;
         boolean t;
         id=(t=uinfo!=null&&uinfo.length==2)?uinfo:securePrompt.request(true, true);
@@ -106,14 +119,26 @@ public class ctrl {
                 // init
                 try {
                     System.err.println("Please provide super user access to postgres for initialisation.");
-                    String[] idinit = securePrompt.request(true, true);
+                    String[] idinit = new String[] {"postgres", "su"};
+                    //securePrompt.request(true, true);
                     c = DriverManager.getConnection("jdbc:postgresql://localhost/", idinit[0], idinit[1]);
                     c.createStatement().executeUpdate("CREATE DATABASE pokemon;");
-                    c.close();
+                    //c.close();
                     c = DriverManager.getConnection("jdbc:postgresql://localhost/pokemon", idinit[0], idinit[1]);
+                    c.createStatement().executeUpdate("CREATE SCHEMA chen");
+                    c.createStatement().executeUpdate("SET search_path TO chen");
+                    //c.close();
+                    //c = DriverManager.getConnection("jdbc:postgresql://localhost/pokemon?currentSchema=chen", idinit[0], idinit[1]);
                     System.out.println("Database pokemon has been created.");
+                    
                     for (String s:sql_inits)                                    // executing sql scripts
-                        runSQLFile(s, c.createStatement());
+                        util.runSSQLFile(
+                                ctrl.class.getResource("../").toURI().toString().replaceAll("%20", " ").replaceAll("file:", ""),
+                                s, 
+                                c.createStatement());
+                    util.runSSQLFile("", "./src/assets/sql/create.ssql", c.createStatement());
+                    util.fillDB(c, new File("./src/assets/sql/pokemon_bck_utf8.csv"), ",");
+                    
                     System.out.println("Database pokemon has been filled. Try manually test.sql to check.");
                     c.close();
                     System.out.println("Setup achieved successfully. You can now connect as user.");
@@ -121,6 +146,10 @@ public class ctrl {
                     System.out.println(ex1.getMessage());
                     System.err.println("Error occured while initializing. Retrying...");
                     access();
+                } catch (IOException ex1) {
+                    System.err.println("Can't find csv data.");
+                } catch (URISyntaxException ex1) {
+                    Logger.getLogger(ctrl.class.getName()).log(Level.SEVERE, null, ex1);
                 }                
             } else if (ex.getMessage().contains("authentification par mot de passe échouée pour l'utilisateur")) {
                 System.err.println("Wrong username or password.");
@@ -166,23 +195,6 @@ public class ctrl {
             }
         }
         return false;
-    }
-    public static boolean runSQLFile(String aSQLScriptFilePath, Statement stmt) {
-        boolean isScriptExecuted = false;
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(aSQLScriptFilePath));
-            String str;
-            StringBuffer sb = new StringBuffer();
-            while ((str = in.readLine()) != null) {
-                sb.append(str + "\n ");
-            }
-            in.close();
-            stmt.executeUpdate(sb.toString());
-            isScriptExecuted = true;
-        } catch (Exception e) {
-            System.err.println("Failed to Execute" + aSQLScriptFilePath +". The error is"+ e.getMessage());
-        }
-        return isScriptExecuted;
     }
     
     protected static void add(pdI I){

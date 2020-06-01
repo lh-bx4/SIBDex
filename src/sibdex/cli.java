@@ -5,8 +5,10 @@
  */
 package sibdex;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import static misc.read2.pS;
-import static sibdex.pokedata.*;
+import misc.util;
 
 /**
  *
@@ -14,7 +16,8 @@ import static sibdex.pokedata.*;
  */
 public class cli {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, URISyntaxException {
+        //util.SSQLRscLoader();
         run();
         System.exit(0);
     }
