@@ -36,12 +36,12 @@ public class test {
         //util.fillDB(new File("src\\assets\\data\\pokemon.csv"), ",");
         //util.completeDB(new File("src\\assets\\data\\pokemondb.csv"), ",");
         //util.sandboxCSV(new File("src\\assets\\sql\\pokemon.csv"));
-        ctrl.QIpokemon(new String[] {
-            ctrl.class.getResource("../")
-                        .toURI()
-                        .toString()
-                        .replaceAll("%20", " ").replaceAll("file:", ""));
-        });
+//        ctrl.QIpokemon(new String[] {
+//            ctrl.class.getResource("../")
+//                        .toURI()
+//                        .toString()
+//                        .replaceAll("%20", " ").replaceAll("file:", ""));
+//        });
                 
     }
 }

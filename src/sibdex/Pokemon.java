@@ -54,6 +54,14 @@ public class Pokemon {
         this.name = name;
     }
 
+    public String getType1() {
+        return type1;
+    }
+
+    public String getType2() {
+        return type2;
+    }
+
     public void setHasUpEv(boolean hasUpEv) {
         this.hasUpEv = hasUpEv;
     }

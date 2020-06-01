@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -24,7 +25,11 @@ public class read2 {
     public static String S() {
         return (new Scanner(System.in)).nextLine();
     } 
-    
+    public static int pI(){
+        System.out.print (">>> ");
+        String ans = (new Scanner(System.in)).nextLine();
+        return(Integer.parseInt(ans));
+    }
     public static void Running() {
         String[] symbol = new String[] {"|","/","-","\\"};
         int i=0;

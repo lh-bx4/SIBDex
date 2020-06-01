@@ -130,67 +130,46 @@ public class util {
      * @throws IOException
      * @throws SQLException 
      */
-    public static void fillDB(Connection c, File f, String delim) throws FileNotFoundException, IOException, SQLException {
+    public static void fillDB(Connection c) throws FileNotFoundException, IOException, SQLException {
+        String delim = ",";
         String row;
-        BufferedReader br = csvopen(f);
+        System.out.println("Pokemon");
+        BufferedReader br = csvopen(new File("./src/assets/data/pokemon.csv"));
         ArrayList<String> trow, theader = null, types = null;
-        //abilities=new ArrayList<>();
-        ArrayList<ArrayList<String>> tvals = new ArrayList<>(); 
+        ArrayList<ArrayList<String>> tvals = new ArrayList<>();
         boolean header = true;
-        int abicol=0;
-        long inserts=0, cinsert=0;
-        //inserts = br.lines().count();
+        int abilities_col=0, cinsert=0;
+        
         while ((row = br.readLine()) != null) {
             System.out.print((++cinsert));
             trow=new ArrayList<>(Arrays.asList(row.split(delim)));
             if (header) {
                 theader=new ArrayList<>(trow);
                 types=new ArrayList<>(trow);
-                abicol=theader.indexOf("abilities");
-                theader.remove(abicol);
+                abilities_col=theader.indexOf("abilities");
+                theader.remove(abilities_col);
                 ResultSetMetaData MD = c.createStatement()
                     .executeQuery("SELECT * FROM pokemon").getMetaData();
-                
                 for(int i=1; i<=MD.getColumnCount(); i++) {
                     String colname=MD.getColumnName(i);
                     for(String headername:theader) {
                         if (colname.equals(headername)) {
                             types.set(i-1, MD.getColumnTypeName(i));
                             break;
-                        }
-                    }
-                }
+                }}}
                 header = false;
             } else {
-                /* forget about abilities
-                String abi = trow.get(abicol);
-                for (char c:"\"[]'".toCharArray()) abi.replaceAll(c+"", "");
-                for (String s:abi.split(";")) {
-                    if (abilities.indexOf(s)==-1) {
-                        abilities.add(s);
-                    }
-                }
-                abilities.add(
-                        new ArrayList<>(Arrays.asList(abi.split(";")))
-                );
-                */
-                trow.remove(abicol);
-                for(int i=0; i<trow.size(); i++) {
+                trow.remove(abilities_col);
+                for(int i=0; i<trow.size(); i++)
                     trow.set(i, f(trow.get(i), types.get(i)));
-                }
                 tvals.add(trow);
-                pdI pokemon = new pdI("pokemon", theader, tvals);
-                String sending = pokemon.send();
-                //System.out.println(sending);
-                pokemon.exec(c, sending);
-                tvals=new ArrayList<>();
             }
-            
-            
             System.out.write('\r');
-            
         } 
-        
+        pdI pokemon = new pdI("pokemon", theader, tvals);
+        String sending = pokemon.send();
+        //System.out.println(sending);
+        pokemon.exec(c, sending);
     }
     /**
      * @deprecated 

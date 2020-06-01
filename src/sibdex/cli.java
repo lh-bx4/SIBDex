@@ -17,7 +17,6 @@ import misc.util;
 public class cli {
     
     public static void main(String[] args) throws IOException, URISyntaxException {
-        //util.SSQLRscLoader();
         run();
         System.exit(0);
     }
