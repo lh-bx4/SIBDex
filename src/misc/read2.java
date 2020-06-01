@@ -20,7 +20,11 @@ public class read2 {
         System.out.print(">>> ");
         return S();
     }
-    
+    public static int pI(){
+        System.out.print (">>> ");
+        String ans = (new Scanner(System.in)).nextLine();
+        return(Integer.parseInt(ans));
+    }
     public static String S() {
         return (new Scanner(System.in)).nextLine();
     } 
