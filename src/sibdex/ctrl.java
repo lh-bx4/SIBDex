@@ -59,6 +59,28 @@ public class ctrl {
                 }
             }
         },
+         new CLIAction ("edit"){
+          @Override
+          public void does() throws SQLException{
+          if(!checkAccess(new int[]{SCIENTISTLVL})){
+              System.err.println("ACCESS DENIED.");
+          }
+          try{
+          pdU Update = new pdU(CNX);
+          String s = Update.send();
+         Update.exec(CNX, s);
+          }catch(UnsupportedOperationException uoe){
+           System.err.println(uoe.getMessage());
+          }
+          }
+        },
+        //affiche tous les pokémons existants dans le pokédex (affichage simplifié)
+        new CLIAction("see all") {
+            @Override
+            public void does() throws SQLException {
+              PrintPokemonList(getAllPokemon(CNX));
+            }
+        },
         //affiche tous les pokémons existants dans le pokédex (affichage simplifié)
         new CLIAction("see all") {
             @Override
