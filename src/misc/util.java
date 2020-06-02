@@ -251,6 +251,43 @@ public class util {
         sending = trainer.send();
         //System.out.println(sending);
         trainer.exec(c, sending);
+        
+        System.out.println("Attack");
+        br = csvopen(new File("./src/assets/data/attack.csv"));
+        theader = null;
+        types = null;
+        tvals = new ArrayList<>();
+        header = true;
+        cinsert=0;
+        
+        while ((row = br.readLine()) != null) {
+            System.out.print((++cinsert));
+            trow=new ArrayList<>(Arrays.asList(row.split(delim)));
+            if (header) {
+                theader=new ArrayList<>(trow);
+                types=new ArrayList<>(trow);
+                
+                ResultSetMetaData MD = c.createStatement()
+                    .executeQuery("SELECT * FROM attack").getMetaData();
+                for(int i=1; i<=MD.getColumnCount(); i++) {
+                    String colname=MD.getColumnName(i);
+                    for(String headername:theader) {
+                        if (colname.equals(headername)) {
+                            types.set(i-1, MD.getColumnTypeName(i));
+                            break;
+                }}}
+                header = false;
+            } else {
+                for(int i=0; i<trow.size(); i++)
+                trow.set(i, f(trow.get(i), types.get(i)));
+                tvals.add(trow);
+            }
+            System.out.write('\r');
+        } 
+        pdI attack = new pdI("attack", theader, tvals);
+        sending = attack.send();
+        System.out.println(sending);
+        attack.exec(c, sending);
     }
     /**
      * @deprecated 
