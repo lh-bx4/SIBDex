@@ -464,48 +464,56 @@ public class ctrl {
         return(pokemonR);
     }
     //Cherche une surÃ©volution s'il n'y en a aucune renvoie un "pokemon" ayant un ID de 0
-    protected static Pokemon getUpEvolution(Connection con, Pokemon pokemon) throws SQLException{
+ //Cherche une surÃ©volution s'il n'y en a aucune renvoie un "pokemon" ayant un ID de 0
+    protected static ArrayList getUpEvolution(Connection con, Pokemon pokemon) throws SQLException{
         String psql = "SELECT pu.id FROM evolve e JOIN pokemon pd ON e.down = pd.id JOIN pokemon pu ON e.up = pu.id WHERE pd.id ="+pokemon.id;
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(psql);
         int id = 0 ;
-        Pokemon pokemonR = new Pokemon();
-        if(rs.next()){
+        ArrayList<Pokemon> pokemons = new ArrayList<Pokemon>();
+        while(rs.next()){
+            Pokemon pokemonR = new Pokemon();
             id = rs.getInt("id");
             pokemonR = getPokemonByID(con,id);
             pokemon.setHasUpEv(true);
-        } else {
-            pokemon.setHasUpEv(false);
+            pokemons.add(pokemonR);
+        }
+        if(pokemons.isEmpty()){
+          pokemon.setHasUpEv(false);
         }
         rs.close();
-        return(pokemonR);
+        return(pokemons);
     }
     //retourne une arraylist contenant la famille d'Ã©volution du pokÃ©mon
     protected static ArrayList getPokemonEvolutions(Connection con, Pokemon pokemon) throws SQLException{
         ArrayList<Pokemon> evolutions = new ArrayList();
-        Pokemon Up = new Pokemon();
-        Up = getUpEvolution(con, pokemon);
+        ArrayList<Pokemon> Up = getUpEvolution(con, pokemon);
         Pokemon Down = new Pokemon();
         Down = getDownEvolution(con,pokemon);
         evolutions.add(Down);
-        evolutions.add(Up);
-        //si pas d'Ã©volutions ou dÃ©jÃ  1 Ã©volution dessus / 1 Ã©volution dessous : STOP et renvoie
+        for(int i=0; i<Up.size();i++){
+        evolutions.add(Up.get(i));
+        }
+        //si pas d'evolutions ou deja  1 evolution dessus / 1 evolution dessous : STOP et renvoie
         if(((pokemon.hasDownEv == false) && (pokemon.hasUpEv == false)) ||((pokemon.hasDownEv == true)&&(pokemon.hasUpEv == true))){
           return(evolutions);
         } else {
             //sinon si il n'y a pas dessous, teste si il y a 2 dessus et si oui l'ajoute
             if(pokemon.hasDownEv == false){
-                Pokemon UpUp = getUpEvolution(con,Up);
-                if(Up.hasUpEv == true){
-                    evolutions.add(Up);
+                for(int i=0; i<Up.size();i++){
+                ArrayList<Pokemon> UpUp = getUpEvolution(con,Up.get(i));              
+                if(Up.get(i).hasUpEv == true){
+                    evolutions.add(UpUp.get(i));
+                }
                 }
             //si il y a dessous teste si il y a 2 dessous et si oui l'ajoute
             } else {
                 Pokemon DownDown = getDownEvolution(con,Down);
-                    evolutions.add(DownDown);
+                 if(Down.hasDownEv == true){
+                     evolutions.add(DownDown);
+           }                  
                 }
-                if(Down.hasDownEv == true){
-            }
+//               
         }
         return(evolutions);
     }
@@ -531,7 +539,7 @@ public class ctrl {
             Move move = new Move();
             move.setId(rs.getInt("id"));
             move.setName(rs.getString("name"));
-            move.setType(rs.getString("type"));
+            move.setType(rs.getString("type0"));
             move.setPower(rs.getInt("power"));
         }
         rs.close();
@@ -545,7 +553,7 @@ public class ctrl {
         return(getMoveStmt(con,psql));
     }
     protected static ArrayList getMoveByType(Connection con, String type)throws SQLException{
-        return(getMoveStmt(con,"SELECT * FROM attack WHERE type ="+"'"+type+"'"));
+        return(getMoveStmt(con,"SELECT * FROM attack WHERE type0 ="+"'"+type+"'"));
     }
     protected static Move getMoveById(Connection con, int id)throws SQLException{
          Move move = new Move();
@@ -558,7 +566,7 @@ public class ctrl {
           move.setAccuracy(rs.getDouble("accuracy"));
           move.setCategory(rs.getString("category"));
           move.setName(rs.getString("name"));
-          move.setType(rs.getString("type"));
+          move.setType(rs.getString("type0"));
         }
         rs.close();
         return(move);
