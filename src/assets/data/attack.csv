@@ -1,0 +1,19 @@
+﻿id,name,power,pp,type0,accuracy,category
+1,Bite,60,25,dark,100,phys
+2,Blizzard,110,5,ice,110,spec
+3,Body Slam,85,15,normal,100,phys
+4,Dream Eater,100,15,psychic,100,spec
+5,Fly,90,15,flying,95,phys
+6,Giga Impact,150,5,normal,90,phys
+7,Aqua Tail,90,10,water,90,phys
+8,Bug Buzz,90,10,bug,100,spec
+9,Earth Power,90,10,ground,100,spec
+10,Draco Meteor,130,5,dragon,90,spec
+11,Flare Blitz,120,15,fire,100,phys
+12,Energy Ball,90,10,grass,100,spec
+13,Flash Cannon,80,10,steel,100,spec
+14,Gunk Shot,120,5,poison,80,phys
+15,Hammer Arm,100,10,fighting,90,phys
+16,Shadow Claw,70,15,ghost,100,phys
+17,Thunder Fang,65,15,electric,95,phys
+18,Spirit Break,75,15,fairy,100,phys
