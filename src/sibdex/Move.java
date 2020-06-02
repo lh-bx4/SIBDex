@@ -14,6 +14,65 @@ public class Move {
     protected String name,type,category;
     protected double accuracy;
 
+    public Move() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getPp() {
+        return pp;
+    }
+
+    public void setPp(int pp) {
+        this.pp = pp;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(double accuracy) {
+        this.accuracy = accuracy;
+    }
+
     public Move(int id, int pp, int power, String name, String type, String category, double accuracy) {
         this.id = id;
         this.pp = pp;
@@ -173,5 +232,9 @@ public class Move {
       }
       return effectiveness;
     }
-    
+    @Override
+    public String toString(){
+    return("MOVE :"+this.name + " | ID :"+this.id+" | TYPE : "+this.type+" | CATEGORY :"+this.category+"\n"
+             +"PPMAX :"+this.pp + " | POWER : "+this.power + " | ACCURACY : "+this.accuracy); 
+    }
 }
