@@ -7,9 +7,13 @@ CREATE TABLE type (
 CREATE TABLE attack(
     id SERIAL,
     name VARCHAR(30),
-    type VARCHAR(30),
+    type0 VARCHAR(30),
+    power INT,
+    pp INT,
+    accuracy INT,
+    category VARCHAR(30),
     CONSTRAINT pk_attack PRIMARY KEY(id),
-    CONSTRAINT fk_attack_type FOREIGN KEY(type) REFERENCES type(en_name)
+    CONSTRAINT fk_attack_type FOREIGN KEY(type0) REFERENCES type(en_name)
 );
 CREATE TABLE trainer(
     id SERIAL,
