@@ -42,6 +42,6 @@ public class test {
 //                        .toString()
 //                        .replaceAll("%20", " ").replaceAll("file:", ""));
 //        });
-                
+               util.sprite("./src/assets/img/sprites/006_LGPE.png");
     }
 }

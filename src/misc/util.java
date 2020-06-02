@@ -5,12 +5,16 @@
  */
 package misc;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,6 +26,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import javax.imageio.ImageIO;
 import sibdex.pokedata;
 import sibdex.pokedata.pdI;
 /**
@@ -258,6 +263,61 @@ public class util {
             System.err.println("Failed to Execute" + SSQLPath + ". The error is" + e.getMessage());
         }
         return isScriptExecuted;
+    }
+    
+    public static void sprite(String s) throws IOException, URISyntaxException {
+        sprite(new File(s));
+    }
+    
+    public static void sprite(File file) throws IOException, URISyntaxException {
+       
+        int b=85;
+        int f=170;
+
+        BufferedImage img = ImageIO.read(new FileInputStream(file));     
+        
+        int X=img.getWidth();
+        int Y=img.getHeight();
+        int mx=X,Mx=0,My=0,my=Y;
+        
+        Color[][] pxls = new Color[X][Y];        
+        
+        //System.out.println(X+":"+Y);
+        for(int y=0;y<Y;y++) {
+            for(int x=0;x<X;x++) {
+                try {
+                    if ((pxls[x][y]=new Color(
+                        img.getRGB(x,y), 
+                        true
+                    )).getTransparency()==1) {
+                        //System.out.print("("+x+":"+y+")");
+                        if (x>Mx) Mx=x;
+                        if (x<mx) mx=x;
+                        if (y>My) My=y;
+                        if (y<my) my=y;
+                    }
+                } catch(ArrayIndexOutOfBoundsException aioobe) {
+                }
+            }
+        }
+        
+        //System.out.println("X:"+mx+"-"+Mx+" Y:"+my+"-"+My);
+        
+        for(int y=my;y<My;y++) {
+            for(int x=mx;x<Mx;x++) {
+                Color pxl=pxls[x][y];
+                //(pxl>>24)&0xff)
+                if (pxl.getTransparency()==2) {
+                    System.out.print("\033[38;2;"+f+";"+f+";"+f+"m░░\033[0m");
+                } else {
+                    System.out.print("\033[38;2;"+(pxl.getRed())+";"+(pxl.getGreen())+";"+(pxl.getBlue())+"m██\033[0m");
+                }
+                
+            }
+            System.out.println("");
+        }
+        //Color clr = pxls[5][5];
+        //System.out.println(clr.getTransparency()+":"+clr.getRed()+":"+clr.getGreen()+":"+clr.getBlue());
     }
 
 }
