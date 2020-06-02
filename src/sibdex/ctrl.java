@@ -23,7 +23,9 @@ import java.util.logging.Logger;
 import misc.read2;
 import misc.util;
 import org.postgresql.util.PSQLException;
+import sibdex.pokedata.pdD;
 import sibdex.pokedata.pdI;
+import sibdex.pokedata.pdU;
 
 /**
  *  mettre tout les fonctions de controle ici
@@ -59,7 +61,37 @@ public class ctrl {
                 }
             }
         },
-        //affiche tous les pokémons existants dans le pokédex (affichage simplifié)
+         new CLIAction ("edit"){
+          @Override
+          public void does() throws SQLException{
+          if(!checkAccess(new int[]{SCIENTISTLVL})){
+              System.err.println("ACCESS DENIED.");
+          }
+          try{
+          pdU Update = new pdU(CNX);
+          String s = Update.send();
+         Update.exec(CNX, s);
+          }catch(UnsupportedOperationException uoe){
+           System.err.println(uoe.getMessage());
+          }
+          }
+        },
+        new CLIAction("delete"){
+        @Override
+        public void does() throws SQLException{
+        if(!checkAccess(new int[]{SCIENTISTLVL})){
+            System.err.println("ACCESS DENIED.");
+        }       
+        try{
+            pdD Delete = new pdD(CNX);
+            String s = Delete.send();
+            Delete.exec(CNX, s);
+        }catch(UnsupportedOperationException uoe){
+           System.err.println(uoe.getMessage());
+          }
+        }
+        },
+        //affiche tous les pokémons existants dans le pokédex (affichage simplifié)      
         new CLIAction("see all") {
             @Override
             public void does() throws SQLException {
@@ -68,7 +100,7 @@ public class ctrl {
         },
 
         //affiche les pokémons commençant par le nom spécifié
-        new CLIAction("search by name"){
+        new CLIAction("search pkmn by name"){
             @Override
             public void does() throws SQLException{
             System.out.println("Name ?");
@@ -76,6 +108,14 @@ public class ctrl {
             //première lettre du nom en majuscule quoi qu'il arrive
             name = name.substring(0, 1).toUpperCase() + name.substring(1);
             PrintPokemonList(getPokemonByName(CNX, name));
+        }
+        },
+        new CLIAction("search pkmn by type"){
+        @Override
+        public void does()throws SQLException{
+        System.out.println("Type ?");
+        String type = read2.pS();
+        PrintPokemonList(getPokemonByType(CNX,type));
         }
         },
         //affiche les données d'un seul pokémon
@@ -87,7 +127,49 @@ public class ctrl {
                PokemonDisplay(CNX, id);
            }
         },
-
+        new CLIAction("see all moves"){
+            @Override
+            public void does() throws SQLException{
+             PrintAttackList(getAllMove(CNX));
+            }
+        },
+        new CLIAction("search move by name"){
+        @Override    
+        public void does()throws SQLException{
+         System.out.println("Name ?");
+         String name = read2.pS();
+         name = name.substring(0,1).toUpperCase()+name.substring(1);
+         PrintAttackList(getMoveByName(CNX,name));
+        }
+                
+        },
+        new CLIAction("search move by type"){
+        @Override
+        public void does()throws SQLException{
+        System.out.println("Type ?");
+        String type = read2.pS();
+        PrintAttackList(getMoveByType(CNX,type));
+        }
+        },
+        new CLIAction("get move"){
+        @Override
+        public void does()throws SQLException{
+        System.out.println("ID ?");
+        int id = read2.pI();
+        System.out.println(getMoveById(CNX,id));
+        }
+        },
+        new CLIAction("test a move"){
+            @Override
+        public void does()throws SQLException{
+        System.out.println("ID du move à tester ?");
+        int idmove = read2.pI();
+        System.out.println("ID du pokémon tank ?");
+        int idtank = read2.pI();
+        testMove(getMoveById(CNX,idmove),getPokemonByID(CNX,idtank));
+        }
+        }
+        
     };
     /*
     private interface quickQuery {
@@ -235,7 +317,7 @@ public class ctrl {
         System.out.println("LOG TYPE : "+CAX.name);
         System.out.print("Actions:{ ");
         for(CLIAction action:CLIA) {
-            System.out.print(action.name+" ");
+            System.out.print(action.name+" | ");
         }
         System.out.println("quit }");
     }  
@@ -282,7 +364,7 @@ public class ctrl {
         public abstract void does() throws SQLException;
 
     }
-     protected static ArrayList getPokemonStmt(Connection con, String psql) throws SQLException{
+    protected static ArrayList getPokemonStmt(Connection con, String psql) throws SQLException{
 
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(psql);
@@ -291,7 +373,7 @@ public class ctrl {
         while(rs.next()){
             Pokemon pokemon = new Pokemon();
             pokemon.setId(rs.getInt("id"));
-            pokemon.setName(rs.getString("name"));
+            pokemon.setName(rs.getString("en_name"));
             pokemon.setType1(rs.getString("type1"));
             pokemon.setType2(rs.getString("type2"));
             //pokemon.setGen(rs.getInt("gen"));
@@ -307,7 +389,7 @@ public class ctrl {
         return(getPokemonStmt(con, "SELECT * FROM pokemon WHERE type1 ='"+type+"' OR type2= '"+type+"'"));            
     }
     protected static ArrayList getPokemonByName(Connection con, String name) throws SQLException{
-        return(getPokemonStmt(con, "SELECT * FROM pokemon WHERE name LIKE '"+name+"%'"));
+        return(getPokemonStmt(con, "SELECT * FROM pokemon WHERE en_name LIKE '"+name+"%'"));
     }
     //rÃ©cupÃ©ration d'un pokÃ©mon via son ID 
     protected static Pokemon getPokemonByID(Connection con,int id) throws SQLException{
@@ -318,50 +400,49 @@ public class ctrl {
         // pokemon hasn't been initialised
         pokemon = new Pokemon();
         if(rs.next()){
-        pokemon.setName(rs.getString("name"));
+        pokemon.setName(rs.getString("en_name"));
         pokemon.setType1(rs.getString("type1"));
         pokemon.setType2(rs.getString("type2"));
         pokemon.setId(rs.getInt("id"));
-//        pokemon.setAttack(rs.getInt("attack"));
-//        pokemon.setSpeattack(rs.getInt("spe_attack"));
-//        pokemon.setSpedefense(rs.getInt("spe_defense"));
-//        pokemon.setDefense(rs.getInt("defense"));
-//        pokemon.setSpeed(rs.getInt("speed"));
-//        pokemon.setHealth(rs.getInt("health"));
-//        pokemon.setExperience(rs.getInt("experience"));
-//        pokemon.setHeight(rs.getInt("height"));
-//        pokemon.setWeight(rs.getInt("weight"));
-//        pokemon.setGen(rs.getInt("gen"));
-//        pokemon.setAgainst_bug(rs.getInt("against_bug"));
-//        pokemon.setAgainst_dark(rs.getInt("against_dark"));
-//        pokemon.setAgainst_dragon(rs.getInt("against_dragon"));
-//        pokemon.setAgainst_electric(rs.getInt("against_electric"));
-//        pokemon.setAgainst_fairy(rs.getInt("against_fairy"));
-//        pokemon.setAgainst_fight(rs.getInt("against_fight"));
-//        pokemon.setAgainst_flying(rs.getInt("against_flying"));
-//        pokemon.setAgainst_fire(rs.getInt("against_fire"));
-//        pokemon.setAgainst_ghost(rs.getInt("against_ghost"));
-//        pokemon.setAgainst_grass(rs.getInt("against_grass"));
-//        pokemon.setAgainst_ground(rs.getInt("against_ground"));
-//        pokemon.setAgainst_ice(rs.getInt("against_ice"));
-//        pokemon.setAgainst_normal(rs.getInt("against_normal"));
-//        pokemon.setAgainst_poison(rs.getInt("against_poison"));
-//        pokemon.setAgainst_psychic(rs.getInt("against_psychic"));
-//        pokemon.setAgainst_rock(rs.getInt("against_rock"));
-//        pokemon.setAgainst_steel(rs.getInt("against_steel"));
-//        pokemon.setAgainst_water(rs.getInt("against_water"));
+        pokemon.setAttack(rs.getInt("attack"));
+        pokemon.setSpeattack(rs.getInt("sp_attack"));
+        pokemon.setSpedefense(rs.getInt("sp_defense"));
+        pokemon.setDefense(rs.getInt("defense"));
+        pokemon.setSpeed(rs.getInt("speed"));
+        pokemon.setHealth(rs.getInt("health"));
+        pokemon.setHeight(rs.getInt("height_m"));
+        pokemon.setWeight(rs.getInt("weight_kg"));
+        pokemon.setGen(rs.getInt("generation"));
+        pokemon.setAgainst_bug(rs.getInt("against_bug"));
+        pokemon.setAgainst_dark(rs.getInt("against_dark"));
+        pokemon.setAgainst_dragon(rs.getInt("against_dragon"));
+        pokemon.setAgainst_electric(rs.getInt("against_electric"));
+        pokemon.setAgainst_fairy(rs.getInt("against_fairy"));
+        pokemon.setAgainst_fight(rs.getInt("against_fight"));
+        pokemon.setAgainst_flying(rs.getInt("against_flying"));
+        pokemon.setAgainst_fire(rs.getInt("against_fire"));
+        pokemon.setAgainst_ghost(rs.getInt("against_ghost"));
+        pokemon.setAgainst_grass(rs.getInt("against_grass"));
+        pokemon.setAgainst_ground(rs.getInt("against_ground"));
+        pokemon.setAgainst_ice(rs.getInt("against_ice"));
+        pokemon.setAgainst_normal(rs.getInt("against_normal"));
+        pokemon.setAgainst_poison(rs.getInt("against_poison"));
+        pokemon.setAgainst_psychic(rs.getInt("against_psychic"));
+       pokemon.setAgainst_rock(rs.getInt("against_rock"));
+        pokemon.setAgainst_steel(rs.getInt("against_steel"));
+        pokemon.setAgainst_water(rs.getInt("against_water"));
         }
         rs.close();
         return(pokemon);
     }
     protected static void PrintPokemonList(ArrayList<Pokemon> pokemons){
-        for(int i=0; i<= pokemons.size()-1;i++){
+        for(int i=0; i<pokemons.size();i++){
             System.out.println(
                     pokemons.get(i).id
                     + " | " + pokemons.get(i).name
                     + " | TYPE1 : "+ pokemons.get(i).type1
-                    + " | TYPE2 : "+ pokemons.get(i).type2);
-                    //+ " | GEN : " + pokemons.get(i).gen);
+                    + " | TYPE2 : "+ pokemons.get(i).type2
+                    + " | GEN : " + pokemons.get(i).gen);
         }
     }
     //Cherche une sous Ã©volution s'il n'y en a aucune, modifie le boolean dÃ©finit dans la classe Pokemon
@@ -420,9 +501,9 @@ public class ctrl {
             //si il y a dessous teste si il y a 2 dessous et si oui l'ajoute
             } else {
                 Pokemon DownDown = getDownEvolution(con,Down);
-                if(Down.hasDownEv == true){
                     evolutions.add(DownDown);
                 }
+                if(Down.hasDownEv == true){
             }
         }
         return(evolutions);
@@ -432,5 +513,53 @@ public class ctrl {
         System.out.println("----- E V O L U T I O N S -----");
         PrintPokemonList(getPokemonEvolutions(con,getPokemonByID(con,id)));
         
+    }
+    protected static void PrintAttackList(ArrayList<Move> Moves){
+        for(int i=0; i<Moves.size();i++){
+        System.out.println( Moves.get(i).id + " | "+Moves.get(i).name + " | "+Moves.get(i).type + " | "+Moves.get(i).power);
+        }
+    }
+    protected static void testMove(Move move, Pokemon poke){
+    System.out.println("THE MOVE :"+move.name+" HAS A MULTIPLIER OF :"+move.effectiveness(poke)+" (WITHOUT STAB) ON "+poke.name);
+    }
+    protected static ArrayList getMoveStmt(Connection con, String psql)throws SQLException{
+         Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(psql);
+        ArrayList<Move>Moves = new ArrayList<Move>();
+        while(rs.next()){
+            Move move = new Move();
+            move.setId(rs.getInt("id"));
+            move.setName(rs.getString("name"));
+            move.setType(rs.getString("type"));
+            move.setPower(rs.getInt("power"));
+        }
+        rs.close();
+        return(Moves);
+    }
+    protected static ArrayList getAllMove(Connection con)throws SQLException{
+        return(getMoveStmt(con,"SELECT * FROM attack"));
+    }
+    protected static ArrayList getMoveByName(Connection con, String name)throws SQLException{
+       String psql = "SELECT * FROM attack WHERE name LIKE '"+name+"%'";
+        return(getMoveStmt(con,psql));
+    }
+    protected static ArrayList getMoveByType(Connection con, String type)throws SQLException{
+        return(getMoveStmt(con,"SELECT * FROM attack WHERE type ="+"'"+type+"'"));
+    }
+    protected static Move getMoveById(Connection con, int id)throws SQLException{
+         Move move = new Move();
+        Statement stmt = con.createStatement();
+        String psql = "Select * FROM attack WHERE id = "+Integer.toString(id);
+        ResultSet rs = stmt.executeQuery(psql);
+        if(rs.next()){
+          move.setPp(rs.getInt("pp"));
+          move.setPower(rs.getInt("power"));
+          move.setAccuracy(rs.getDouble("accuracy"));
+          move.setCategory(rs.getString("category"));
+          move.setName(rs.getString("name"));
+          move.setType(rs.getString("type"));
+        }
+        rs.close();
+        return(move);
     }
 }

@@ -150,26 +150,152 @@ public abstract class pokedata {
         }   
     }
     
-    /**
-     * Update database
+     /**
+     * Update database with the id of the object to update
      */
-    public static final class pdU extends pokedata {    
-        
-        public pdU(int type) {
+    public static final class pdU extends pokedata {
+
+        private final String tName;
+        private final ArrayList<String> tCols;
+        private final ArrayList<ArrayList<String>> tVals;
+        private final int id;
+
+        public pdU(Connection con) throws SQLException {
             super(UPDATE);
+            ArrayList<String> tc;                                               // columns
+            ArrayList<String> tvr;                                              // table value rows
+            ArrayList<ArrayList<String>> tv;                                    // table values
+            ResultSetMetaData MD;
+            ResultSet Rs;
+            ArrayList<Boolean> b;
+            String tn = "";
+            System.out.println("Choose the table name where to edit data :");
+            Rs = con.createStatement()
+                    .executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='chen'");
+            ArrayList<String> tns = new ArrayList<String>();
+            while (Rs.next()) {
+                tns.add(Rs.getString("table_name"));
+            }
+            b = read2.ArrowSelector(tns, true, false);
+            for (int k = 0; k < tns.size(); k++) {
+                if (b.get(k)) {
+                    tn = tns.get(k);
+                }
+            }
+            if (tn.equals("")) {
+                throw new UnsupportedOperationException("You must provide a table name in order to edit.");
+            }
+
+            MD = con.createStatement()
+                    .executeQuery("SELECT * FROM " + tn).getMetaData();
+
+            int n = MD.getColumnCount();
+            ArrayList<String> cols = new ArrayList<String>(),
+                    colstype = new ArrayList<String>();
+            for (int k = 1; k <= n; k++) {
+                cols.add(MD.getColumnName(k));
+            }
+            System.out.println("Choose the id of the object you want to edit");
+            this.id = read2.pI();
+            // taking choosed columns
+            System.out.println("Give column names to edit. Empty . to stop.");
+            tc = new ArrayList<String>();
+            b = read2.ArrowSelector(cols, false, false);
+            for (int k = 0; k < cols.size(); k++) {
+                if (b.get(k)) {
+                    tc.add(cols.get(k));
+                    colstype.add(MD.getColumnTypeName(k + 1));
+                }
+            }
+            System.out.println("Give values. Empty string to stop, + to continue.");
+            tv = new ArrayList<ArrayList<String>>();
+            // add limit on the column name
+            int i = 0;
+            do {
+                System.out.println(++i);
+                tvr = new ArrayList<String>();
+                for (int k = 0; k < tc.size(); k++) {
+                    System.out.print(colstype.get(k) + ":" + tc.get(k) + ":");
+                    tvr.add(util.f(read2.S(), colstype.get(k)));
+                }
+                System.out.print(util.d(tvr, ",", BRACKETS) + ",?");
+                tv.add(tvr);
+            } while (!"".equals(read2.S()));
+            this.tName = tn;
+            this.tCols = tc;
+            this.tVals = tv;
         }
-        
+
+        public String send() throws UnsupportedOperationException {
+            // TODO see if all lines have the right format
+            boolean t1;
+            if (t1 = tCols.size() != 0) // check if there are more than 0 column selected
+            {
+                if (tCols.size() != tVals.get(0).size()) {
+                    throw new UnsupportedOperationException("Different values length while inserting.");
+                }
+            ArrayList<String> t = new ArrayList<>();
+            for (ArrayList<String> r : tVals) {
+                t.add(util.d(r, ",", BRACKETS));
+            }
+            return(super.send(new String[]{
+                "UPDATE",
+                tName,
+                "SET",
+                t1 ? util.c(tCols, ",") : "",
+                "=",
+                util.c(t, ","),
+                "WHERE id = ",
+                Integer.toString(id)
+            }
+            ));
+        } else {
+                return(null);
+            }  
     }
-    
+    }
+
     /**
-     * Delete from database
+     * Delete an element using its ID from db
      */
     public static final class pdD extends pokedata {    
-        
-        public pdD(int type) {
+        private final String tName;
+        private final int id;
+
+        public pdD(Connection con) throws SQLException {
             super(DELETE);
+            ResultSet Rs;
+            ArrayList<Boolean> b;
+            String tn = "";
+            System.out.println("Choose the table name where to delete data :");
+            Rs = con.createStatement()
+                    .executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='chen'");
+            ArrayList<String> tns = new ArrayList<String>();
+            while (Rs.next()) {
+                tns.add(Rs.getString("table_name"));
+            }
+            b = read2.ArrowSelector(tns, true, false);
+            for (int k = 0; k < tns.size(); k++) {
+                if (b.get(k)) {
+                    tn = tns.get(k);
+                }
+            }
+            if (tn.equals("")) {
+                throw new UnsupportedOperationException("You must provide a table name in order to delete.");
+            }
+
+            System.out.println("Choose the id of the object you want to delete. WARNING : THIS ACTION IS IRREVERSIBLE");
+            this.id = read2.pI();
+            this.tName = tn;
         }
-        
+        public String send() throws UnsupportedOperationException{
+            return(super.send(new String[]{
+            "DELETE FROM "+
+            this.tName+
+            " WHERE id = "+
+            this.id
+        }));
+        }
     }
     
     /**
