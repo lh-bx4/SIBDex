@@ -175,6 +175,82 @@ public class util {
         String sending = pokemon.send();
         //System.out.println(sending);
         pokemon.exec(c, sending);
+        
+        
+
+        System.out.println("Evolve");
+        br = csvopen(new File("./src/assets/data/evolve.csv"));
+        theader = null;
+        types = null;
+        tvals = new ArrayList<>();
+        header = true;
+        cinsert=0;
+        
+        while ((row = br.readLine()) != null) {
+            System.out.print((++cinsert));
+            trow=new ArrayList<>(Arrays.asList(row.split(delim)));
+            if (header) {
+                theader=new ArrayList<>(trow);
+                types=new ArrayList<>(trow);
+                
+                ResultSetMetaData MD = c.createStatement()
+                    .executeQuery("SELECT * FROM evolve").getMetaData();
+                for(int i=1; i<=MD.getColumnCount(); i++) {
+                    String colname=MD.getColumnName(i);
+                    for(String headername:theader) {
+                        if (colname.equals(headername)) {
+                            types.set(i-1, MD.getColumnTypeName(i));
+                            break;
+                }}}
+                header = false;
+            } else {
+                for(int i=0; i<trow.size(); i++)
+                trow.set(i, f(trow.get(i), types.get(i)));
+                tvals.add(trow);
+            }
+            System.out.write('\r');
+        } 
+        pdI evolve = new pdI("evolve", theader, tvals);
+        sending = evolve.send();
+        //System.out.println(sending);
+        evolve.exec(c, sending);
+        
+        System.out.println("Trainer");
+        br = csvopen(new File("./src/assets/data/trainer.csv"));
+        theader = null;
+        types = null;
+        tvals = new ArrayList<>();
+        header = true;
+        cinsert=0;
+        
+        while ((row = br.readLine()) != null) {
+            System.out.print((++cinsert));
+            trow=new ArrayList<>(Arrays.asList(row.split(delim)));
+            if (header) {
+                theader=new ArrayList<>(trow);
+                types=new ArrayList<>(trow);
+                
+                ResultSetMetaData MD = c.createStatement()
+                    .executeQuery("SELECT * FROM trainer").getMetaData();
+                for(int i=1; i<=MD.getColumnCount(); i++) {
+                    String colname=MD.getColumnName(i);
+                    for(String headername:theader) {
+                        if (colname.equals(headername)) {
+                            types.set(i-1, MD.getColumnTypeName(i));
+                            break;
+                }}}
+                header = false;
+            } else {
+                for(int i=0; i<trow.size(); i++)
+                trow.set(i, f(trow.get(i), types.get(i)));
+                tvals.add(trow);
+            }
+            System.out.write('\r');
+        } 
+        pdI trainer = new pdI("trainer", theader, tvals);
+        sending = trainer.send();
+        //System.out.println(sending);
+        trainer.exec(c, sending);
     }
     /**
      * @deprecated 

@@ -224,7 +224,7 @@ public class ctrl {
                     //String[] idinit = new String[] {"postgres", "su"};
                     String[] idinit = securePrompt.request(true, true);
                     c = DriverManager.getConnection("jdbc:postgresql://localhost/", idinit[0], idinit[1]);
-                    c.createStatement().executeUpdate("CREATE DATABASE pokemon;");
+                    c.createStatement().executeUpdate("CREATE DATABASE pokemon");
                     //c.close();
                     c = DriverManager.getConnection("jdbc:postgresql://localhost/pokemon", idinit[0], idinit[1]);
                     c.createStatement().executeUpdate("CREATE SCHEMA chen");
@@ -235,10 +235,11 @@ public class ctrl {
                     
                     for (String s:sql_inits)                                    // executing sql scripts
                         util.runSSQLFile(
-                                ctrl.class.getResource("../").toURI().toString().replaceAll("%20", " ").replaceAll("file:", ""),
-                                s, 
-                                c.createStatement());
-                    util.runSSQLFile("", "./src/assets/sql/create.ssql", c.createStatement());
+                            ctrl.class.getResource("../").toURI().toString().replaceAll("%20", " ").replaceAll("file:", ""),
+                            s, 
+                            c.createStatement()
+                        );
+                    //util.runSSQLFile("", "./src/assets/sql/create.ssql", c.createStatement());
                     util.fillDB(c);
                     
                     System.out.println("Database pokemon has been filled. Try manually test.sql to check.");

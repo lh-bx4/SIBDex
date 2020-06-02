@@ -14,6 +14,8 @@ CREATE TABLE attack(
 CREATE TABLE trainer(
     id SERIAL,
     name VARCHAR(30),
+    age INT,
+    region VARCHAR(30),
     CONSTRAINT pk_trainer PRIMARY KEY(id)
 );
 CREATE TABLE pokemon(

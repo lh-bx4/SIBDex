@@ -1,7 +1,7 @@
-﻿id;name;age;region
-1;Ash;10;Kanto
-2;Red;16;Kanto
-3;Blue;16;Kanto
-4;Inreal;19;Sinnoh
-5;Bx4;19;Hoenn
-6;LouisCarre;20;Kalos
+id,name,age,region
+1,Ash,10,Kanto
+2,Red,16,Kanto
+3,Blue,16,Kanto
+4,Inreal,19,Sinnoh
+5,Bx4,19,Hoenn
+6,LouisCarre,20,Kalos

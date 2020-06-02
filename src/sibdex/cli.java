@@ -30,7 +30,8 @@ public class cli {
     public void run() throws URISyntaxException {
        
         do {
-            ctrl.access(new String[] {"postgres", "su"});
+            //ctrl.access(new String[] {"postgres", "su"});                     // automatic login
+            ctrl.access();
         } while(!ctrl.isAccessible());
         String uri = cli.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         System.out.println("Running in "+uri);
