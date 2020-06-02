@@ -200,7 +200,7 @@ public abstract class pokedata {
             // taking choosed columns
             System.out.println("Give column names to edit. Empty . to stop.");
             tc = new ArrayList<String>();
-            b = read2.ArrowSelector(cols, false, true);
+            b = read2.ArrowSelector(cols, false, false);
             for (int k = 0; k < cols.size(); k++) {
                 if (b.get(k)) {
                     tc.add(cols.get(k));
@@ -242,25 +242,60 @@ public abstract class pokedata {
                 "UPDATE",
                 tName,
                 "SET",
-                t1 ? util.e(util.c(tCols, ","), BRACKETS) : "",
+                t1 ? util.c(tCols, ",") : "",
                 "=",
                 util.c(t, ","),
                 "WHERE id = ",
                 Integer.toString(id)
             }
             ));
-        }   
+        } else {
+                return(null);
+            }  
+    }
     }
 
     /**
-     * Delete from database
+     * Delete an element using its ID from db
      */
     public static final class pdD extends pokedata {    
-        
-        public pdD(int type) {
+        private final String tName;
+        private final int id;
+
+        public pdD(Connection con) throws SQLException {
             super(DELETE);
+            ResultSet Rs;
+            ArrayList<Boolean> b;
+            String tn = "";
+            System.out.println("Choose the table name where to delete data :");
+            Rs = con.createStatement()
+                    .executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='chen'");
+            ArrayList<String> tns = new ArrayList<String>();
+            while (Rs.next()) {
+                tns.add(Rs.getString("table_name"));
+            }
+            b = read2.ArrowSelector(tns, true, false);
+            for (int k = 0; k < tns.size(); k++) {
+                if (b.get(k)) {
+                    tn = tns.get(k);
+                }
+            }
+            if (tn.equals("")) {
+                throw new UnsupportedOperationException("You must provide a table name in order to delete.");
+            }
+
+            System.out.println("Choose the id of the object you want to delete. WARNING : THIS ACTION IS IRREVERSIBLE");
+            this.id = read2.pI();
+            this.tName = tn;
         }
-        
+        public String send() throws UnsupportedOperationException{
+            return(super.send(new String[]{
+            "DELETE FROM "+
+            this.tName+
+            " WHERE id = "+
+            this.id
+        }));
+        }
     }
     
     /**
